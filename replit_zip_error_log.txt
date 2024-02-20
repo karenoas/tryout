@@ -1,0 +1,8 @@
+{"error":".zip archives do not support non-regular files","level":"error","msg":"unable to write file .cache/replit/modules/nodejs-20:v28-20240213-3f08513","time":"2024-02-20T12:29:16Z"}
+{"error":".zip archives do not support non-regular files","level":"error","msg":"unable to write file .cache/replit/modules/python-3.10:v48-20240216-a5950e9","time":"2024-02-20T12:29:16Z"}
+{"error":".zip archives do not support non-regular files","level":"error","msg":"unable to write file .cache/replit/modules/replit:v5-20240209-9e3a339","time":"2024-02-20T12:29:16Z"}
+{"error":".zip archives do not support non-regular files","level":"error","msg":"unable to write file .config/npm/node_global/bin/npm-merge-driver","time":"2024-02-20T12:29:19Z"}
+{"error":".zip archives do not support non-regular files","level":"error","msg":"unable to write file .config/npm/node_global/bin/npm2yarn","time":"2024-02-20T12:29:19Z"}
+{"error":".zip archives do not support non-regular files","level":"error","msg":"unable to write file .config/npm/node_global/lib/node_modules/npm-merge-driver/node_modules/.bin/mkdirp","time":"2024-02-20T12:29:19Z"}
+{"error":".zip archives do not support non-regular files","level":"error","msg":"unable to write file .config/npm/node_global/lib/node_modules/npm-merge-driver/node_modules/.bin/which","time":"2024-02-20T12:29:19Z"}
+{"error":".zip archives do not support non-regular files","level":"error","msg":"unable to write file .config/npm/node_global/lib/node_modules/npm2yarn/node_modules/.bin/rimraf","time":"2024-02-20T12:29:19Z"}
