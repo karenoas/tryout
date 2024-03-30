@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agregar Fila</title>
+</head>
+<body>
+  
+    <h1>Agregar Fila</h1>
+    <form id="form-agregar" action="/agregar_fila" method="post">
+        <label for="tabla">Selecciona la tabla:</label>
+      <select id="tabla" name="tabla">
+          <option value="">Selecciona una tabla</option> <!-- Valor vacío -->
+          {% for tabla in tablas %}
+              <option value="{{ tabla }}">{{ tabla }}</option>
+          {% endfor %}
+      </select>
+        <br>
+        {% for columna in columnas %}
+            <label for="{{ columna }}">{{ columna }}:</label>
+            <input type="text" name="valores[]" id="{{ columna }}" placeholder="{{ columna }}">
+        {% endfor %}
+        <br>
+        <button type="submit">Agregar Fila</button>
+    </form>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    $(document).ready(function() {
+        $('#form-agregar').submit(function(event) {
+            event.preventDefault();
+            var form = $(this);
+            $.ajax({
+                type: 'POST',  // Cambiado a POST
+                url: form.attr('action'),  // Utiliza la acción del formulario como la URL
+                data: form.serialize(),  // Serializa el formulario para enviar los datos
+                success: function(data) {
+                    alert(data);
+                    // Puedes hacer algo después de agregar la fila, como recargar la página
+                    location.reload();
+                },
+                error: function(xhr, status, error) {
+                    alert('Error al agregar fila');
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+    });
+
+  </script>
+    <script>
+        $(document).ready(function() {
+            $('#tabla').change(function() {
+                var tabla = $(this).val();
+                $.ajax({
+                    type: 'GET',
+                    url: '/obtener_columnas?tabla=' + tabla,
+                    success: function(data) {
+                        $('#form-agregar').find('input[type=text]').remove();
+                        data.forEach(function(columna) {
+                            $('#form-agregar').append('<label for="' + columna + '">' + columna + ':</label>');
+                            $('#form-agregar').append('<input type="text" name="valores[]" id="' + columna + '" placeholder="' + columna + '">');
+                        });
+                    },
+                    error: function(xhr, status, error) {
+                        alert('Error al obtener columnas');
+                        console.error(xhr.responseText);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

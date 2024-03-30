@@ -1,0 +1,793 @@
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rollers - Productos</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        body {
+            flex: 1;
+        }
+
+        header {
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        .gallery {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            margin: auto;
+          margin-top: 40px;
+        }
+
+        .image-card {
+            background-color: black;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            color: black;
+            position: relative;
+            width: 600px;
+          display: flex; /* Cambia el display a flex */
+          flex-direction: column;
+        }
+
+        .image-card a {
+            text-decoration: none;
+        }
+
+        .image-card:hover {
+            box-shadow: 0 0 1.5rem gray;
+        }
+      .divo {
+        height: 2px; /* Set the height of the divider */
+        background-color: rgba(255, 255, 255, 0.5); /* Add some transparency to the divider color */
+      }
+        .image-container {
+            text-align: center;
+            width: 100%;
+            height: 400px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+        }
+
+        .image-container img {
+            width: 100%;
+            height: auto;
+        }
+      .profile-picture {
+          width: 30px;
+          height: 30px;
+          border-radius: 50%;
+          object-fit: cover;
+          margin-right: 5px;
+      }
+        .text-background {
+            position: relative;
+            z-index: 1;
+            background-color: black;
+            color: white;
+            padding: 10px;
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+            box-sizing: border-box;
+            margin: 0 auto;
+            bottom: -10px;
+            display: flex;
+            flex-wrap: wrap;
+          align-items: center;
+            justify-content: center;
+          flex-direction: column;
+        }
+
+        /* Estilos específicos para el botón de like */
+        .likeButton {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            border: none;
+            background-color: transparent;
+            position: relative;
+           margin-top: 10px;
+        }
+
+        .likeButton::after {
+            content: 'like';
+            width: fit-content;
+            height: fit-content;
+            position: absolute;
+            font-size: 15px;
+            color: white;
+            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+            opacity: 0;
+            visibility: hidden;
+            transition: .2s linear;
+            top: 115%;
+        }
+
+        .icon {
+            width: 30px;
+            height: 30px;
+            transition: .2s linear;
+        }
+
+        .icon path {
+            fill: white;
+            transition: .2s linear;
+        }
+
+        .likeButton:hover > .icon {
+            transform: scale(1.2);
+        }
+
+        .likeButton:hover > .icon path {
+            fill: rgb(177, 139, 189);
+        }
+
+        .likeButton:hover::after {
+            visibility: visible;
+            opacity: 1;
+            top: 105%;
+        }
+      .liked::after {
+          visibility: visible;
+          opacity: 1;
+          color: rgb(177, 139, 189); /* Cambia el color del texto "like" */
+      }
+      .like-count {
+          color: white; /* Cambiar el color del número a blanco */
+          margin-left: 5px; /* Ajustar la posición del número hacia la derecha */
+      }
+      .delete-button {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background-color: rgb(20, 20, 20);
+        border: none;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.164);
+        cursor: pointer;
+        transition-duration: 0.3s;
+        overflow: hidden;
+        position: relative;
+      }
+
+      .delete-svgIcon {
+        width: 15px;
+        transition-duration: 0.3s;
+      }
+
+      .delete-svgIcon path {
+        fill: white;
+      }
+
+      .delete-button:hover {
+        width: 90px;
+        border-radius: 50px;
+        transition-duration: 0.3s;
+        background-color: rgb(255, 69, 69);
+        align-items: center;
+      }
+
+      .delete-button:hover .delete-svgIcon {
+        width: 20px;
+        transition-duration: 0.3s;
+        transform: translateY(60%);
+        -webkit-transform: rotate(360deg);
+        -moz-transform: rotate(360deg);
+        -o-transform: rotate(360deg);
+        -ms-transform: rotate(360deg);
+        transform: rotate(360deg);
+      }
+
+      .delete-button::before {
+        display: none;
+        content: "Delete";
+        color: white;
+        transition-duration: 0.3s;
+        font-size: 2px;
+      }
+
+      .delete-button:hover::before {
+        display: block;
+        padding-right: 10px;
+        font-size: 13px;
+        opacity: 1;
+        transform: translateY(0px);
+        transition-duration: 0.3s;
+      }
+
+      .comments-popup-container {
+          position: relative; /* Para que el popup se posicione correctamente */
+          width: 100%; /* Ancho deseado del popup */
+      }
+
+      .comments-popup {
+          display: none;
+          position: fixed; /* Cambiar de 'absolute' a 'fixed' */
+          top: 50%; /* Centrar verticalmente en la mitad de la pantalla */
+          left: 50%; /* Centrar horizontalmente en la mitad de la pantalla */
+          transform: translate(-50%, -50%); /* Mover el popup hacia arriba y hacia la izquierda en la mitad de su propio tamaño */
+        max-width: 80%; /* Adjust the max-width as needed */
+        width: 1000px; /* Set the desired width */
+        height: 560px;/* Ancho máximo del popup */
+          background-color: black;
+          padding: 20px;
+          border-radius: 10px;
+          z-index: 1000;
+      }
+
+      .comments-popup-inner {
+        display: grid;
+        grid-template-columns: 1fr 1fr; /* La primera columna se ajusta al contenido, la segunda ocupa el espacio restante */
+        grid-column-gap: 20px; /* Espacio entre las columnas */
+        max-height: 80vh; /* Establece una altura máxima para el comments-popup-inner */
+         
+      }
+      
+      .comments-column {
+        display: grid;
+        grid-template-rows: auto auto; /* Dos filas automáticas */
+        grid-row-gap: 20px; /* Espacio entre las filas */
+        grid-column: 2; /* Segunda columna */
+        height: 100%; 
+      }
+
+      .comments-container {
+        grid-row: 1; 
+        position: relative;
+        flex: 1;
+         max-height: 570;
+display: flex;
+        flex-direction: column;
+            justify-content: space-between; 
+        margin-bottom: 20px;
+      }
+      .form-comments-container {
+        widht:100%;
+        grid-row: 2; 
+              position: relative;
+              flex: 1;
+               max-height: 570;
+      display: flex;
+              flex-direction: column;
+                  justify-content: space-between; 
+            }
+
+          .comments-list {
+              list-style: none;
+              padding: 0;
+              margin: 0;
+          }
+
+          .comments-list li {
+              padding: 20px 0;
+              border-bottom: 0.6px solid rgba(255, 255, 255, 0.5);
+              color: gray;
+          }
+      .comments-list-container::-webkit-scrollbar {
+        display: none; /* Oculta el scrollbar de WebKit */
+      }
+          /* Estilos para el input y botón de agregar comentario */
+          #commentInput {
+              width: calc(100% - 100px); /* Ajusta el ancho según tu preferencia */
+              padding: 10px;
+              border: none;
+              border-radius: 5px;
+              margin-bottom: 10px;
+          }
+
+          #commentInput:focus {
+              outline: none;
+          }
+
+          #addCommentButton {
+              width: 100px;
+              padding: 10px;
+              border: none;
+              border-radius: 5px;
+              background-color: #4CAF50;
+              color: white;
+              cursor: pointer;
+          }
+
+          #addCommentButton:hover {
+              background-color: #45a049;
+          }
+      .comment {
+          display: flex; /* Muestra los elementos en línea */
+          align-items: center; /* Alinea los elementos verticalmente */
+          margin-bottom: 10px; /* Espacio entre cada comentario */
+      }
+
+      .comment img.profile-picture {
+          width: 30px; /* Ancho deseado */
+          height: 30px; /* Alto deseado */
+          border-radius: 50%; /* Para que la imagen tenga forma circular */
+          object-fit: cover; /* Ajusta la imagen dentro del contenedor manteniendo su relación de aspecto */
+          margin-right: 5px; /* Espacio a la derecha del icono */
+      }
+
+      .comment span {
+          color: white; /* Color del texto del nombre de usuario */
+          margin-right: 10px; /* Espacio a la derecha del nombre de usuario */
+      }
+      .image-popup-container {
+        background-color: black;
+        grid-column: 1; /* Primera columna */
+        grid-row: 1 / span 2; /* Ocupa desde la primera fila hasta dos filas */
+        max-width: 100%; /* Establece un ancho máximo para la imagen */
+        max-height: 100%;
+        margin-bottom: 20px; /* Margen inferior de 20px */
+        padding: 0px; /* Añade un poco de espacio alrededor de la imagen */
+        flex: 1; /* Ocupa todo el espacio disponible */
+        display: flex;
+      }
+
+
+      .popup-image {
+        max-width: 100%;
+        max-height: 100%;
+        height: auto;
+        width: auto;
+           /* Asegura que la imagen no /* Espacio inferior entre la imagen y la lista de comentarios */
+      }
+      .comments-popup .close-button {
+        position: absolute;
+        top: 10px;
+        right: 15px;
+        cursor: pointer;
+        color: white;
+        font-size: 20px;
+      }
+
+      /* Update the following style */
+      .comments-popup-container {
+          width: 500px; /* Ancho deseado del popup */
+      }
+      .input {
+        color: #fff;
+        font-size: 0.9rem;
+        background-color: transparent;
+        width: 100%; /* Ancho completo */
+        box-sizing: border-box;
+        display: flex;
+        align-items: center;
+        padding-inline: 0.5em;
+        padding-block: 0.7em;
+        border: none;
+        border-bottom: var(--border-height) solid var(--border-before-color);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        position: relative;
+      }
+
+      .input-border {
+        position: absolute;
+        background: var(--border-after-color);
+        width: 0%;
+        height: 2px;
+        bottom: 0;
+        left: 0;
+        transition: width 0.3s cubic-bezier(0.6, -0.28, 0.735, 0.045);
+      }
+
+      .input:focus {
+        outline: none;
+      }
+
+      .input:focus + .input-border {
+        width: 100%;
+      }
+.form-control{
+  background-color: black;
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+  margin-top: 10px;
+      margin: 0 5px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      }
+
+      .input-alt {
+        font-size: 1.2rem;
+        padding-inline: 1em;
+        padding-block: 0.8em;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .input-border-alt {
+        height: 3px;
+        background: linear-gradient(60deg, black 80%, gray 100%, black 0%);
+        transition: width 0.4s cubic-bezier(0.42, 0, 0.58, 1.00);
+      }
+
+      .input-alt:focus + .input-border-alt {
+        width: 100%;
+      }
+      .comments-list-container {
+        max-height: 500px; /* Ajusta este valor según tus preferencias */
+        overflow-y: auto;
+      }
+      .form-control button {
+        width: 50px;
+        height: 100%;
+        background-color: transparent;
+        outline: none;
+        border: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        position: absolute;
+        right: 0;
+        top: 0;
+      }
+
+      svg {
+        height: 18px;
+        transition: all 0.3s;
+      }
+
+      .form-control button svg path {
+        transition: all 0.3s;
+      }
+
+      .form-control button:hover svg path {
+        fill: #3c3c3c;
+        stroke: white;
+      }
+      .form-container {
+        position: relative;
+        margin: 8% auto;
+        min-height: 60%;
+        width: 50%;
+        box-shadow: 0 2px 16px rgba(0, 0, 0, 0.6);
+        background: white;
+        padding: 0px 0px 5px 15px;
+        box-sizing: border-box;
+        border-radius: 8px;
+      }
+    
+    </style>
+</head>
+<body>
+  <nav class="navbar-container navbar">
+    {% if username == 'Admin' %}
+        <div class="navbar-brand">Rollers - Panel de Moderador</div>
+    {% else %}
+        <div class="navbar-brand">Rollers</div>
+    {% endif %}
+    </div>
+    <form class="search-form" action="/profile/view" method="get">
+        <input type="text" name="username" placeholder="Buscar usuario">
+        <button type="submit">Buscar</button>
+    </form>
+      <div class="menu-icon" onclick="toggleMenu()">☰</div>
+      <div class="navbar-menu" id="navbarMenu">
+          <ul>
+            <li><a href="/index.html"><i class="fa-solid fa-house-user"></i></i></i> Inicio</a></li>
+            <li><a href="/roller.html"><i class="fa-solid fa-panorama"></i></i> Subir Producto</a></li>
+            <li><a href="/profile" class="profile-link"><img class="profile-image-navbar" src=
+                                                          
+                                                          lt="Foto de perfil"></a></li>
+          </ul>
+      </div>
+  </nav>
+
+
+    <header>
+        <h1> </h1>
+    </header>
+  <div class="gallery">
+      {% for image in images %}
+    <div class="image-card">
+          <div class="image-container">
+              <img src="{{ url_for('uploaded_file', filename=image) }}" alt="{{ image }}">
+          </div>
+          <div class="text-background">
+              <p>ID De producto: {{ image }}</p>
+              <p>Nombre: {{ titles.get(image) }}<br></p>
+              <div class="like">
+                  <button class="likeButton" onclick="likeButtonClicked(this)" data-product="{{ image }}">
+                      <svg viewBox="0 0 17.503 15.625" height="20.625" width="20.503" xmlns="http://www.w3.org/2000/svg" class="icon">
+                          <path transform="translate(0 0)" d="M8.752,15.625h0L1.383,8.162a4.824,4.824,0,0,1,0-6.762,4.679,4.679,0,0,1,6.674,0l.694.7.694-.7a4.678,4.678,0,0,1,6.675,0,4.825,4.825,0,0,1,0,6.762L8.752,15.624ZM4.72,1.25A3.442,3.442,0,0,0,2.277,2.275a3.562,3.562,0,0,0,0,5l6.475,6.556,6.475-6.556a3.563,3.563,0,0,0,0-5A3.443,3.443,0,0,0,12.786,1.25h-.01a3.415,3.415,0,0,0-2.443,1.038L8.752,3.9,7.164,2.275A3.442,3.442,0,0,0,4.72,1.25Z" id="Fill"></path>
+                      </svg>
+                      <span class="like-count" data-image="{{ image }}">{{ likes_count_dict.get(image, 0) }}</span>
+                  </button>
+
+              </div>
+            <div class="commentButton" onclick="openCommentsPopup('{{ image }}')">
+                <svg viewBox="0 0 24 24" height="24" width="24" xmlns="http://www.w3.org/2000/svg" class="icon">
+                    <path d="M0 0h24v24H0z" fill="none"/>
+                    <path d="M17 16.17L18.41 14.76 20.83 17.17 22.24 15.76 19.83 13.34zM2 4v16h20V4H2zm18 14H4V6h16v12z"/>
+                </svg>
+            </div>
+              <div class="comments-popup-container">
+                  <div id="commentsPopup_{{ image }}" class="comments-popup">
+                    <div class="comments-popup-inner">
+                      <div class="image-popup-container">
+                        <img id="popupImage_{{ image }}" class="popup-image" src="" alt="Imagen de la tarjeta">
+                      </div>
+                      <!-- Divisor entre la imagen emergente y los otros elementos -->
+
+
+                      <div class="divo"></div>
+                      <div class="comments-column">
+                      <div class="comments-container">
+                        <div class="comments-list-container">
+                          <div id="commentsList_{{ image }}" class="comments-list">
+                              {% for comment in comments_dict[image] %}
+                              <div class="comment">
+                                  <div>
+                                      <img src="{{ url_for('uploaded_file', filename='prof_pics/' + comment.user_profile_picture) }}" alt="Foto de perfil de {{ comment.username }}" class="profile-picture">
+                                      <span>{{ comment.username }}</span>
+                                  </div>
+                                  <p>{{ comment.comment_text }}</p>
+                              </div>
+                              {% endfor %}
+                      
+                        </div>
+                        </div>
+                        </div>
+                        <div class="form-comments-container">
+                        <div class="form-control">
+                          <input class="input input-alt" placeholder="Comentario..." required="" type="text" id="commentInput_{{ image }}">
+                          <span class="input-border input-border-alt"></span>
+                          <button button onclick="addComment('{{ image }}')" class="button">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 664 663">
+                              <path
+                                fill="none"
+                                d="M646.293 331.888L17.7538 17.6187L155.245 331.888M646.293 331.888L17.753 646.157L155.245 331.888M646.293 331.888L318.735 330.228L155.245 331.888"
+                              ></path>
+                              <path
+                                stroke-linejoin="round"
+                                stroke-linecap="round"
+                                stroke-width="33.67"
+                                stroke="#6c6c6c"
+                                d="M646.293 331.888L17.7538 17.6187L155.245 331.888M646.293 331.888L17.753 646.157L155.245 331.888M646.293 331.888L318.735 330.228L155.245 331.888"
+                              ></path>
+                            </svg>
+                          </button>
+                        </div>
+                        </div>
+
+                      </div>
+                    </div>
+
+                   
+                      <span class="close-button" onclick="closeCommentsPopup(event)">×</span>
+                  </div>
+              </div>
+  
+              {% if username == 'Admin' %}
+              <form action="{{ url_for('delete_image') }}" method="post">
+                  <input type="hidden" name="image_filename" value="{{ image }}">
+                  <button class="delete-button">
+                      <svg class="delete-svgIcon" viewBox="0 0 448 512">
+                          <path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"></path>
+                      </svg>
+                  </button>
+              </form>
+              {% endif %}
+          </div>
+      </div>
+      {% endfor %}
+  </div>
+
+
+  <script>
+      document.addEventListener('DOMContentLoaded', function() {
+
+          fetch('/likes')
+              .then(response => response.json())
+              .then(data => {
+                  document.querySelectorAll('.like-count').forEach(span => {
+                      const imageId = span.dataset.image;
+                      const count = data[imageId] || 0;
+                      span.textContent = count;
+                  });
+
+                  // cambiar esto manana
+                  document.querySelectorAll('.likeButton').forEach(button => {
+                      button.addEventListener('click', function() {
+                          likeButtonClicked(this);
+                      });
+
+                      // Restaurar el estado del botón si estaba activo antes de recargar la página
+                      const imageId = button.dataset.product;
+                      if (sessionStorage.getItem(imageId) === 'liked') {
+                          button.classList.add('liked');
+                          button.querySelector('.icon path').style.fill = 'rgb(177, 139, 189)';
+                      }
+                  });
+              });
+      });
+
+      function likeButtonClicked(button) {
+          const imageId = button.dataset.product;
+          const likeCount = button.querySelector('.like-count');
+          let action = button.classList.contains('liked') ? 'unlike' : 'like';
+
+        button.disabled = true;
+
+          fetch('/like', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ product_id: imageId, action: action }),
+          })
+          .then(response => {
+              if (!response.ok) {
+                  throw new Error('Network response was not ok');
+              }
+              return response.json();
+          })
+          .then(data => {
+              likeCount.textContent = data.likesCount;
+
+              if (action === 'like') {
+                  button.classList.add('liked');
+                  button.querySelector('.icon path').style.fill = 'rgb(177, 139, 189)';
+                  // Al hacer clic en el botón "like", almacenar su estado en sessionStorage
+                  sessionStorage.setItem(imageId, 'liked');
+              } else {
+                  button.classList.remove('liked');
+                  button.querySelector('.icon path').style.fill = 'white';
+                  // Al hacer clic en el botón "unlike", eliminar su estado de sessionStorage
+                  sessionStorage.removeItem(imageId);
+              }
+            button.disabled = false;
+          })
+          .catch(error => {
+              console.error('Error:', error);
+          });
+      }
+    function toggleMenu() {
+          var menu = document.getElementById("navbarMenu");
+          if (menu.style.display === "block") {
+              menu.style.display = "none";
+          } else {
+              menu.style.display = "block";
+          }
+      }
+
+    $(window).on('scroll', function(){
+      if($(window).scrollTop()){
+          $('header').addClass('nav-show');
+
+      } 
+      else{
+        $('header').removeClass('nav-show');
+      }
+                    });
+function searchProfile() {
+                                           var username = document.getElementById("searchInput").value;
+                                           if (username.trim() !== "") {
+                                               window.location.href = "/profile/view?username=" + username;
+                                           } else {
+                                               alert("Por favor, ingrese un nombre de usuario para buscar.");
+                                           }
+                                       }
+    function openCommentsPopup(imageId) {
+        const commentsPopup = document.getElementById(`commentsPopup_${imageId}`);
+      const popupImage = document.getElementById(`popupImage_${imageId}`);
+
+      // Obtener la imagen de la tarjeta y establecerla en la imagen del popup
+      const imageSrc = document.querySelector(`img[src*="${imageId}"]`).src;
+
+      // Asignar la fuente de la imagen del popup
+      popupImage.setAttribute('src', imageSrc);
+        commentsPopup.style.display = 'block';
+
+        fetch(`/comments?image_id=${imageId}`)
+            .then(response => response.json())
+            .then(data => {
+                const commentsList = document.getElementById(`commentsList_${imageId}`);
+                commentsList.innerHTML = ''; // Limpiar la lista antes de agregar comentarios
+
+                data.forEach(row => {
+                    const listItem = document.createElement('li');
+
+                    // Crear y configurar el elemento img para la foto de perfil
+                    const imgElement = document.createElement('img');
+                    imgElement.src = row.user_profile_picture;
+                    imgElement.alt = `${row.username}'s profile picture`;
+                    imgElement.className = 'profile-picture';
+                    listItem.appendChild(imgElement);
+
+                    // Crear un span para el texto del comentario
+                    const textSpan = document.createElement('span');
+                    textSpan.textContent = ` ${row.username}: ${row.comment_text}`;
+                    listItem.appendChild(textSpan);
+
+                    commentsList.appendChild(listItem);
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching comments:', error);
+            });
+    }
+
+
+    function addComment(imageId) {
+        const commentInput = document.getElementById('commentInput_' + imageId);
+        const commentText = commentInput.value.trim();
+        commentInput.value = '';
+
+        if (commentText !== '') {
+            fetch('/add_comment', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ image_id: imageId, comment: commentText }),
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    const commentsList = document.getElementById('commentsList_' + imageId);
+                    const listItem = document.createElement('li');
+                    const profilePicture = "{{ url_for('uploaded_file', filename='prof_pics/' + username + '.jpg') }}";
+
+                    // Agrega la foto de perfil del usuario al comentario
+                    const imgElement = document.createElement('img');
+                    imgElement.src = profilePicture;
+                    imgElement.alt = data.username + "'s profile picture";
+                    imgElement.className = "profile-picture";
+                    listItem.appendChild(imgElement);
+
+                    // Agrega el texto del comentario
+                    const commentSpan = document.createElement('span');
+                    commentSpan.textContent = data.username + ': ' + commentText;
+                    listItem.appendChild(commentSpan);
+
+                    commentsList.appendChild(listItem);
+                } else {
+                    console.error('Error adding comment:', data.error);
+                }
+            })
+            .catch(error => {
+                console.error('Error adding comment:', error);
+            });
+        }
+    }
+    function closeCommentsPopup(event) {
+      const commentsPopup = event.target.closest('.comments-popup');
+      commentsPopup.style.display = 'none';
+    }
+
+  </script>
+
+
+
+
+</body>
+</html> 
+``` form-comments-container deberia quedar bajo comments-container pero esta quedando al lado derecho

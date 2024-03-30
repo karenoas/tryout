@@ -1,13 +1,72 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Imagen Cargada</title>
+    <title>Producto Subido</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-    <h1>Aquí está</h1>
-    <!-- No se incluye la extensión en el nombre de la imagen -->
-    <img src="/uploads/{{ product }}" alt="Imagen Cargada">
+    <nav class="navbar">
+        <div class="navbar-brand">Rollers</div>
+        <div class="menu-icon" onclick="toggleMenu()">☰</div>
+        <div class="navbar-menu" id="navbarMenu">
+            <ul>
+              <li><a href="/index.html"><i class="fa-solid fa-house-user"></i></i></i> Inicio</a></li>
+              <li><a href="/roller.html"><i class="fa-solid fa-panorama"></i></i> Subir Producto</a></li>
+              <li><a href="/profile" class="profile-link"><img class="profile-image-navbar" src="{{ url_for('uploaded_file', filename='prof_pics/' + username + '.jpg') }}" alt="Foto de perfil"></a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <header>
+      <div class="success">
+          <div class="success__icon">
+            <svg fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path clip-rule="evenodd" d="m12 1c-6.075 0-11 4.925-11 11s4.925 11 11 11 11-4.925 11-11-4.925-11-11-11zm4.768 9.14c.0878-.1004.1546-.21726.1966-.34383.0419-.12657.0581-.26026.0477-.39319-.0105-.13293-.0475-.26242-.1087-.38085-.0613-.11844-.1456-.22342-.2481-.30879-.1024-.08536-.2209-.14938-.3484-.18828s-.2616-.0519-.3942-.03823c-.1327.01366-.2612.05372-.3782.1178-.1169.06409-.2198.15091-.3027.25537l-4.3 5.159-2.225-2.226c-.1886-.1822-.4412-.283-.7034-.2807s-.51301.1075-.69842.2929-.29058.4362-.29285.6984c-.00228.2622.09851.5148.28067.7034l3 3c.0983.0982.2159.1748.3454.2251.1295.0502.2681.0729.4069.0665.1387-.0063.2747-.0414.3991-.1032.1244-.0617.2347-.1487.3236-.2554z" fill="#393a37" fill-rule="evenodd"></path></svg>
+          </div>
+          <div class="success__title">Tu producto se ha subido correctamente.<br> ID: {{ product }}</div>
+          
+      </div>
+    </header>
+    <div class="image-container">
+        <img src="{{ url_for('uploaded_file', filename=product) }}" alt="{{ product }}">
+    </div>
+  <div class="button-container">
+      <button class="continue-button" onclick="window.location.href='/roller.html';">
+          <span>Continuar</span>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 74 74" height="34" width="34">
+              <circle stroke-width="3" stroke="white" r="35.5" cy="37" cx="37"></circle>
+              <path fill="white" d="M25 35.5C24.1716 35.5 23.5 36.1716 23.5 37C23.5 37.8284 24.1716 38.5 25 38.5V35.5ZM49.0607 38.0607C49.6464 37.4749 49.6464 36.5251 49.0607 35.9393L39.5147 26.3934C38.9289 25.8076 37.9792 25.8076 37.3934 26.3934C36.8076 26.9792 36.8076 27.9289 37.3934 28.5147L45.8787 37L37.3934 45.4853C36.8076 46.0711 36.8076 47.0208 37.3934 47.6066C37.9792 48.1924 38.9289 48.1924 39.5147 47.6066L49.0607 38.0607ZM25 38.5L48 38.5V35.5L25 35.5V38.5Z"></path>
+          </svg>
+      </button>
+  </div>
+
+    <!-- Script para el comportamiento del menú -->
+    <script>
+      document.querySelector('.continue-button').addEventListener('click', function() {
+      window.location.href = '/roller.html';
+      }
+        
+        function toggleMenu() {
+            var menu = document.getElementById("navbarMenu");
+            if (menu.style.display === "block") {
+                menu.style.display = "none";
+            } else {
+                menu.style.display = "block";
+            }
+        }
+      
+      $(window).on('scroll', function(){
+        if($(window).scrollTop()){
+            $('header').addClass('nav-show');
+
+        } 
+        else{
+          $('header').removeClass('nav-show');
+        }
+
+      })
+    </script>
 </body>
 </html>
