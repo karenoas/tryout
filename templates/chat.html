@@ -44,14 +44,12 @@
           --delay: 0s;
       }
 
-      body {
+       body {
           font-family: var(--body-font);
           color: var(--body-color);
           background-position: center;
           background-size: cover;
           background-repeat: no-repeat;
-          background-blend-mode: color-dodge;
-          background-color: rgba(18, 21, 39, 0.86);
           display: flex;
           justify-content: center;
           align-items: center;
@@ -60,7 +58,7 @@
           width: 100%;
           height: 100vh;
           overflow: hidden;
-      }
+        }
 
       body:before {
           position: absolute;
@@ -68,14 +66,13 @@
           top: 0;
           width: 100%;
           height: 100%;
-          background: linear-gradient(163deg, #1f1d2b 21%, rgba(31, 29, 43, 0.3113620448) 64%);
+
           opacity: 0.4;
           content: "";
       }
 
       .container {
-          background-color: rgba(0, 0, 0, 0.3);
-          max-width: 1240px;
+          max-width: 100%;
           max-height: 900px;
           height: 95vh;
           display: flex;
@@ -87,8 +84,11 @@
           box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
           position: relative;
       }
-
+        .sidebar::-webkit-scrollbar {
+            width: 0; /* Ocultar el scroller en Chrome, Safari y otros navegadores webkit */
+        }
       .sidebar {
+        border-right: 1px solid var(--border-color);
           width: 220px;
           height: 100%;
           padding: 30px;
@@ -113,7 +113,7 @@
       }
 
       .sidebar .logo-expand {
-        transition: opacity 0.4s ease-in-out;
+        transition: opacity 0.3s ease;
           text-decoration: none;
           color: #fff;
           font-size: 19px;
@@ -123,20 +123,10 @@
           position: sticky;
           top: 0;
       }
-        .image-preview-container {
-            width: 100%;
-            height: auto;
-            margin-bottom: 10px;
-        }
-
-        .image-preview-container img {
-            max-width: 100%;
-            height: auto;
-            display: none;
-            border-radius: 10px; /* Agrega bordes redondeados a la imagen de vista previa */
+        .hidden {
+            opacity: 0;
         }
       .sidebar .logo-expand:before {
-         transition: opacity 1.0s ease-in-out;
           content: "";
           position: absolute;
           top: -30px;
@@ -144,15 +134,6 @@
           width: 200px;
           height: 70px;
           z-index: -1;
-      }
-      .hidden {
-          opacity: 0; /* Opacidad 0 para ocultar el elemento */
-      }
-
-      .sidebar-link:hover,
-      .sidebar-link.is-active {
-          color: #fff;
-          font-weight: 600;
       }
 
       .sidebar-link:hover:nth-child(2n+1) svg,
@@ -236,7 +217,6 @@
           display: flex;
           align-items: center;
           text-decoration: none;
-          color: var(--body-color);
       }
 
       .side-menu a+a {
@@ -247,7 +227,6 @@
           width: 30px;
           padding: 8px;
           border-radius: 10px;
-          background-color: var(--button-bg);
         flex-shrink: 0;
           margin-right: 16px;
       }
@@ -299,7 +278,6 @@
           width: 100%;
           height: 100%;
           border: none;
-          background-color: var(--button-bg);
           border-radius: 8px;
           font-family: var(--body-font);
           font-size: 14px;
@@ -337,8 +315,9 @@
       }
 
       .user-settings .notify svg {
-          width: 20px;
-          margin-left: 24px;
+        width: 23px;
+        margin-left: 8px;
+       
           flex-shrink: 0;
       }
         img.poster-img {
@@ -1444,6 +1423,9 @@
               height: 100vh;
               border-radius: 0;
               max-height: 100%;
+            margin-left: -4vw;
+                margin-top: -4vh;
+            }
           }
       }
 
@@ -1601,6 +1583,8 @@
                 justify-content: center;/* Espacio entre el input y el botón */
               }
       header {
+        margin-left: 15px;
+      
           display: flex; /* Utilizar flexbox */
           align-items: center; /* Alinear verticalmente los elementos */
       }
@@ -1631,12 +1615,13 @@
                   text-align: center;
               }
       .message-cont {
-          background-color: rgba(0, 0, 0, 0.5); /* Fondo negro semi-transparente */
+        height: 75vh;
+          background-color: rgba(0, 0, 0, 0); /* Fondo negro semi-transparente */
           border-radius: 0px;
           padding: 10px;
           margin-bottom: 0px;
           overflow-y: auto; /* Agregar desplazamiento vertical si es necesario */
-          max-height: 70vh; /* Altura máxima del contenedor de mensajes */
+          max-height: 100vh; /* Altura máxima del contenedor de mensajes */
       }
 
       #message-list {
@@ -1669,13 +1654,16 @@
           clear: both; /* Limpiar el float */
       }
       .caja-input {
-          display: flex;
-          align-items: center;
-          width: 100%;
-          background-color: rgba(0, 0, 0, 0.5);
-          padding: 0 15px;
-          border-radius: 0px;
-          border: 0px solid rgba(0, 0, 0, 0.5);
+        margin-left: 10px;
+        margin-right: 10px;
+        margin-top: 15px;
+        display: flex;
+        align-items: center;
+        width: 97%;
+        background-color: rgba(0, 0, 0, 0.1);
+        padding: 0 15px;
+        border-radius: 20px;
+          border: 0px solid rgba(0, 0, 0, 0.1);
       }
 
       #message-input {
@@ -1709,7 +1697,7 @@
           border: none;
           cursor: pointer;
           transition: all 0.3s;
-          margin-left: 700px; /* Mover el botón al extremo derecho */
+          margin-right: -75vw; /* Mover el botón al extremo derecho */
       }
 
       #send-button svg {
@@ -1723,8 +1711,7 @@
       }
 
       #send-button svg path {
-          fill: #3c3c3c;
-          stroke: white;
+          
           transition: all 0.3s;
       }
 
@@ -1758,7 +1745,7 @@
       }
         @media (max-width: 768px) {
             #send-button {
-                margin-left: 30vw; /* Eliminar el margen en pantallas más pequeñas */
+                margin-right: -92vw; /* Eliminar el margen en pantallas más pequeñas */
             }
         }
 
@@ -1785,7 +1772,7 @@
           <div class="side-title">NAVEGAR</div>
 
           <div class="side-menu">
-            <a class="sidebar-link discover" href="home">
+            <a class="sidebar-link discover" href="/home">
               <svg viewBox="0 0 24 24" fill="currentColor">
                 <path
                   d="M12,0A12,12,0,1,0,24,12,12.013,12.013,0,0,0,12,0Zm.5,20.975V19.69A4.19,4.19,0,0,0,8.31,15.5H8.3a3.143,3.143,0,0,1-2.223-.921L3.024,11.524A8.985,8.985,0,0,1,17.016,4.532a1.548,1.548,0,0,1-.913.3H14.669A1.555,1.555,0,0,0,13.114,6.39V7.432a1.555,1.555,0,0,1-1.555,1.555h0A1.555,1.555,0,0,0,10,10.542v1.042a1.555,1.555,0,0,0,1.555,1.555h4.156a1.555,1.555,0,0,1,1.555,1.555v1.52a1.555,1.555,0,0,0,.456,1.1l.833.833A8.964,8.964,0,0,1,12.5,20.975Z"
@@ -1793,7 +1780,7 @@
               </svg>
               Para ti
             </a>
-            <a class="sidebar-link trending" href="#">
+            <a class="sidebar-link trending" href="/likeds">
               <svg viewBox="0 0 24 24" fill="currentColor">
                 <path
                   fill-rule="evenodd"
@@ -1803,7 +1790,7 @@
               </svg>
               Me Gusta
             </a>
-            <a class="sidebar-link" href="post">
+            <a class="sidebar-link" href="/post">
               <svg viewBox="0 0 24 24" fill="currentColor">
                 <path
                   d="m12 0a12 12 0 1 0 12 12 12.013 12.013 0 0 0 -12-12zm0 22a10 10 0 1 1 10-10 10.011 10.011 0 0 1 -10 10zm5-10a1 1 0 0 1 -1 1h-3v3a1 1 0 0 1 -2 0v-3h-3a1 1 0 0 1 0-2h3v-3a1 1 0 0 1 2 0v3h3a1 1 0 0 1 1 1z"
@@ -1811,7 +1798,7 @@
               </svg>
               Postear
             </a>
-            <a class="sidebar-link is-active" href="chat">
+            <a class="sidebar-link is-active" href="/chat">
               <svg viewBox="0 0 24 24" fill="currentColor">
                 <path
                   fill-rule="evenodd"
@@ -1838,16 +1825,16 @@
           <div class="side-title">CATEGORIAS</div>
 
           <div class="side-menu">
-            <a class="sidebar-link" href="#">
-              <svg viewBox="0 0 24 24" fill="currentColor">
-                <path
-                  fill-rule="evenodd"
-                  clip-rule="evenodd"
-                  d="m8,12c-3.309,0-6-2.691-6-6S4.691,0,8,0s6,2.691,6,6-2.691,6-6,6Zm14.5,6c0-.46-.089-.895-.218-1.313l1.416-.816-.998-1.733-1.411.813c-.605-.652-1.393-1.125-2.289-1.33v-1.621h-2v1.621c-.896.205-1.685.678-2.289,1.33l-1.411-.813-.998,1.733,1.416.816c-.129.418-.218.853-.218,1.313s.089.895.218,1.313l-1.416.816.998,1.733,1.411-.813c.605.652,1.393,1.125,2.289,1.33v1.621h2v-1.621c.896-.205,1.685-.678,2.289-1.33l1.411.813.998-1.733-1.416-.816c.129-.418.218-.853.218-1.313Zm-4.5,1.5c-.827,0-1.5-.673-1.5-1.5s.673-1.5,1.5-1.5,1.5.673,1.5,1.5-.673,1.5-1.5,1.5Zm-8-1.5c0-1.459.397-2.822,1.079-4h-6.579c-2.481,0-4.5,2.019-4.5,4.5v5.5h12.721c-1.665-1.466-2.721-3.607-2.721-6Z"
-                />
-              </svg>
-              Panel de Moderacion <i class="fi fi-sr-low-vision"></i>
-            </a>
+            {% if session.username == 'Miguel N.' %}
+                <a class="sidebar-link" href="/admin">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="m8,12c-3.309,0-6-2.691-6-6S4.691,0,8,0s6,2.691,6,6-2.691,6-6,6Zm14.5,6c0-.46-.089-.895-.218-1.313l1.416-.816-.998-1.733-1.411.813c-.605-.652-1.393-1.125-2.289-1.33v-1.621h-2v1.621c-.896.205-1.685.678-2.289,1.33l-1.411-.813-.998,1.733,1.416.816c-.129.418-.218.853-.218,1.313s.089.895.218,1.313l-1.416.816.998,1.733,1.411-.813c.605.652,1.393,1.125,2.289,1.33v1.621h2v-1.621c.896-.205,1.685-.678,2.289-1.33l1.411.813.998-1.733-1.416-.816c.129-.418.218-.853.218-1.313Zm-4.5,1.5c-.827,0-1.5-.673-1.5-1.5s.673-1.5,1.5-1.5,1.5.673,1.5,1.5-.673,1.5-1.5,1.5Zm-8-1.5c0-1.459.397-2.822,1.079-4h-6.579c-2.481,0-4.5,2.019-4.5,4.5v5.5h12.721c-1.665-1.466-2.721-3.607-2.721-6Z" />
+                    </svg>
+                    <span style="color: red;">Panel (Mod {{ session.username }})</span>
+                    <i class="fas fa-eye"></i>
+                </a>
+            {% endif %}
+
             <a class="sidebar-link" href="#">
               <svg viewBox="0 0 24 24" fill="currentColor">
                 <path
@@ -1873,7 +1860,9 @@
       </div>
       {% if request.path == '/chat' %}
           <style>
-              /* Ocultar el chat-container cuando la URL es solo /chat */
+              /* Ocultar el chat-container cuando la URL es solo /chat */.sidebar {
+                border-right: none;
+              }
               .chat-container {
                   display: none;
               }
@@ -1908,7 +1897,12 @@
                     margin-top: -1px;
                   }
                   .chat-container header {
-                  margin-top: -1px;
+                  margin-top: 30px;
+                    margin-left: 20px;
+                  }
+                  .caja-input {
+                    border-radius: 30px;
+                    margin-top: 20px;
                   }
                     .chat-container {
                       height: 100%; /* Por ejemplo, ocupa el 70% de la altura de la ventana */
@@ -1917,6 +1911,7 @@
                     }
                   .message-cont {
                     max-height: 74vh;
+                    margin-left: 2px;
                   }
                     .sidebar {
                         display: none;
@@ -1931,31 +1926,30 @@
           </div>
 
           <div class="user-settings">
-            <img
-              class="user-img"
-              src="{{ url_for('uploaded_file', filename='prof_pics/' + username + '.jpg') }}"
-              alt=""
-            />
+            {% if user_profile_picture %}
+              <img class="user-img" src="{{ url_for('uploaded_file', filename='prof_pics/' + username + '.jpg') }}"  alt="">
+            {% else %}
+              <img class="user-img" src="{{ url_for('uploaded_file', filename='prof_pics/vendetta.jpg') }}" alt="Vendetta">
+            {% endif %}
 
-            <div class="user-name">{{ username }}</div>
+            <label class="ui-switch">
+               <input type="checkbox">
+               <div class="slider">
+                 <div class="circle"></div>
+               </div>
+             </label>
+            <a class="notify" href="{{ url_for('logout') }}">
+                              <svg viewBox="0 0 24 24" fill="currentColor">
 
-            <svg viewBox="0 0 492 492" fill="currentColor">
-              <path
-                d="M484.13 124.99l-16.11-16.23a26.72 26.72 0 00-19.04-7.86c-7.2 0-13.96 2.79-19.03 7.86L246.1 292.6 62.06 108.55c-5.07-5.06-11.82-7.85-19.03-7.85s-13.97 2.79-19.04 7.85L7.87 124.68a26.94 26.94 0 000 38.06l219.14 219.93c5.06 5.06 11.81 8.63 19.08 8.63h.09c7.2 0 13.96-3.57 19.02-8.63l218.93-219.33A27.18 27.18 0 00492 144.1c0-7.2-2.8-14.06-7.87-19.12z"
-              ></path>
-            </svg>
 
-            <div class="notify">
-              <div class="notification"></div>
-              <svg viewBox="0 0 24 24" fill="currentColor">
-                <path
-                  fill-rule="evenodd"
-                  clip-rule="evenodd"
-                  d="M18.707 8.796c0 1.256.332 1.997 1.063 2.85.553.628.73 1.435.73 2.31 0 .874-.287 1.704-.863 2.378a4.537 4.537 0 01-2.9 1.413c-1.571.134-3.143.247-4.736.247-1.595 0-3.166-.068-4.737-.247a4.532 4.532 0 01-2.9-1.413 3.616 3.616 0 01-.864-2.378c0-.875.178-1.682.73-2.31.754-.854 1.064-1.594 1.064-2.85V8.37c0-1.682.42-2.781 1.283-3.858C7.861 2.942 9.919 2 11.956 2h.09c2.08 0 4.204.987 5.466 2.625.82 1.054 1.195 2.108 1.195 3.745v.426zM9.074 20.061c0-.504.462-.734.89-.833.5-.106 3.545-.106 4.045 0 .428.099.89.33.89.833-.025.48-.306.904-.695 1.174a3.635 3.635 0 01-1.713.731 3.795 3.795 0 01-1.008 0 3.618 3.618 0 01-1.714-.732c-.39-.269-.67-.694-.695-1.173z"
-                />
-              </svg>
-            </div>
+                                <path d="M12.9999 2C10.2385 2 7.99991 4.23858 7.99991 7C7.99991 7.55228 8.44762 8 8.99991 8C9.55219 8 9.99991 7.55228 9.99991 7C9.99991 5.34315 11.3431 4 12.9999 4H16.9999C18.6568 4 19.9999 5.34315 19.9999 7V17C19.9999 18.6569 18.6568 20 16.9999 20H12.9999C11.3431 20 9.99991 18.6569 9.99991 17C9.99991 16.4477 9.55219 16 8.99991 16C8.44762 16 7.99991 16.4477 7.99991 17C7.99991 19.7614 10.2385 22 12.9999 22H16.9999C19.7613 22 21.9999 19.7614 21.9999 17V7C21.9999 4.23858 19.7613 2 16.9999 2H12.9999Z" fill="#ec5252"/>
+                                <path d="M13.9999 11C14.5522 11 14.9999 11.4477 14.9999 12C14.9999 12.5523 14.5522 13 13.9999 13V11Z" fill="#ec5252"/>
+                                <path d="M5.71783 11C5.80685 10.8902 5.89214 10.7837 5.97282 10.682C6.21831 10.3723 6.42615 10.1004 6.57291 9.90549C6.64636 9.80795 6.70468 9.72946 6.74495 9.67492L6.79152 9.61162L6.804 9.59454L6.80842 9.58848C6.80846 9.58842 6.80892 9.58778 5.99991 9L6.80842 9.58848C7.13304 9.14167 7.0345 8.51561 6.58769 8.19098C6.14091 7.86637 5.51558 7.9654 5.19094 8.41215L5.18812 8.41602L5.17788 8.43002L5.13612 8.48679C5.09918 8.53682 5.04456 8.61033 4.97516 8.7025C4.83623 8.88702 4.63874 9.14542 4.40567 9.43937C3.93443 10.0337 3.33759 10.7481 2.7928 11.2929L2.08569 12L2.7928 12.7071C3.33759 13.2519 3.93443 13.9663 4.40567 14.5606C4.63874 14.8546 4.83623 15.113 4.97516 15.2975C5.04456 15.3897 5.09918 15.4632 5.13612 15.5132L5.17788 15.57L5.18812 15.584L5.19045 15.5872C5.51509 16.0339 6.14091 16.1336 6.58769 15.809C7.0345 15.4844 7.13355 14.859 6.80892 14.4122L5.99991 15C6.80892 14.4122 6.80897 14.4123 6.80892 14.4122L6.804 14.4055L6.79152 14.3884L6.74495 14.3251C6.70468 14.2705 6.64636 14.1921 6.57291 14.0945C6.42615 13.8996 6.21831 13.6277 5.97282 13.318C5.89214 13.2163 5.80685 13.1098 5.71783 13H13.9999V11H5.71783Z" fill="#ec5252"/>
+                              </svg>
+
+          </a>
           </div>
+          
         </div>
         <script>
             document.addEventListener('DOMContentLoaded', function() {
@@ -1987,6 +1981,7 @@
           }
 
           .user-item {
+            cursor: pointer;
               background-color: rgba(0, 0, 0, 0.5); /* Fondo negro semi-transparente */
               border-radius: 10px; /* Borde redondeado */
               padding: 10px; /* Espacio interno */
@@ -2052,16 +2047,20 @@
           </div>
            <div class="overlay" id="overlay" style="display: none;">Pendiente</div>
           <div class="user-listing">
-          <ul>
-              {% for chat in chats %}
-                  <li class="user-item" data-chat-id="{{ chat[0] }}">
-                    <div class="user-container">
-                      <img class="user-img" src="{{ url_for('uploaded_file', filename='prof_pics/' + chat[0] + '.jpg') }}" alt="">
-                      <a  class="user-nome" href="/chat/{{ chat[0] }}">{{ chat[0] }}</a>
-                    </div>
-                  </li>
-              {% endfor %}
-          </ul>
+            {% if chats %}
+                <ul>
+                    {% for chat in chats %}
+                        <li class="user-item" data-chat-id="{{ chat[0] }}">
+                            <div class="user-container">
+                                <img class="user-img" src="{{ url_for('uploaded_file', filename='prof_pics/' + chat[0] + '.jpg') }}" alt="">
+                                <a class="user-nome" href="/chat/{{ chat[0] }}">{{ chat[0] }}</a>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No hay chats existentes.</p>
+            {% endif %}
           </div>
           </div>
         
@@ -2110,7 +2109,7 @@
                     <button type="submit" id="send-button">
                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 664 663">
                         <path fill="none" d="M646.293 331.888L17.7538 17.6187L155.245 331.888M646.293 331.888L17.753 646.157L155.245 331.888M646.293 331.888L318.735 330.228L155.245 331.888"></path>
-                        <path stroke-linejoin="round" stroke-linecap="round" stroke-width="33.67" stroke="#6c6c6c" d="M646.293 331.888L17.7538 17.6187L155.245 331.888M646.293 331.888L17.753 646.157L155.245 331.888M646.293 331.888L318.735 330.228L155.245 331.888"></path>
+                        <path stroke-linejoin="round" stroke-linecap="round" stroke-width="33.67" stroke="#fff" d="M646.293 331.888L17.7538 17.6187L155.245 331.888M646.293 331.888L17.753 646.157L155.245 331.888M646.293 331.888L318.735 330.228L155.245 331.888"></path>
                       </svg>
                     </button>
                   </div>
@@ -2739,5 +2738,112 @@
         color: white;
       }
     </style>
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        const switchInput = document.querySelector('.ui-switch input');
+
+        // Verificar el estado del interruptor en el almacenamiento local
+        const darkModeEnabled = localStorage.getItem('darkModeEnabled') === 'true';
+
+        // Actualizar el estado del interruptor según la sesión
+        switchInput.checked = darkModeEnabled;
+
+        // Función para aplicar estilos de fondo oscuro
+        function applyDarkModeStyles() {
+          document.body.classList.add('dark-mode');
+          const container = document.querySelector('.container');
+          if (container) {
+            container.classList.add('dark-mode');
+          }
+          const mainblog = document.querySelector('.main-blog');
+          if (mainblog) {
+            mainblog.classList.add('dark-mode');
+          }
+          const botonesSVG = document.querySelectorAll('.side-menu svg');
+          botonesSVG.forEach(boton => {
+            boton.classList.add('dark-mode');
+          });
+          const textoSVG = document.querySelectorAll('.side-menu a');
+          textoSVG.forEach(boton => {
+            boton.classList.add('dark-mode');
+          });
+          const activoSVG = document.querySelectorAll('sidebar-link:hover');
+          activoSVG.forEach(boton => {
+            boton.classList.add('dark-mode');
+          });
+          const activadoSVG = document.querySelectorAll('.sidebar-link.is-active');
+          activadoSVG.forEach(boton => {
+            boton.classList.add('dark-mode');
+          });
+          const busqueda = document.querySelector('.search-bar input');
+          if (busqueda) {
+            busqueda.classList.add('dark-mode');
+          }
+          const mensajeicono = document.querySelector('#send-button:hover svg path');
+          if (mensajeicono) {
+            mensajeicono.classList.add('dark-mode');
+          }
+          const messageRightElements = document.querySelectorAll('.message-right');
+          messageRightElements.forEach(messageRightElement => {
+            messageRightElement.classList.add('dark-mode');
+          });
+        }
+
+        // Aplicar estilos de fondo oscuro si está habilitado
+        if (darkModeEnabled) {
+          applyDarkModeStyles();
+        }
+
+        // Agregar un listener para el cambio de estado del interruptor
+        switchInput.addEventListener('change', function() {
+          // Guardar el estado del interruptor en el almacenamiento local
+          localStorage.setItem('darkModeEnabled', this.checked);
+
+          // Cambiar la clase del cuerpo según el estado del interruptor
+          if (this.checked) {
+            applyDarkModeStyles();
+          } else {
+            document.body.classList.remove('dark-mode');
+            const container = document.querySelector('.container');
+            if (container) {
+              container.classList.remove('dark-mode');
+            }
+            const mensajeicono = document.querySelector('#send-button:hover svg path');
+            if (mensajeicono) {
+              mensajeicono.classList.remove('dark-mode');
+            }
+            const busqueda = document.querySelector('.search-bar input');
+            if (busqueda) {
+              busqueda.classList.remove('dark-mode');
+            }
+            const mainblog = document.querySelector('.main-blog');
+            if (mainblog) {
+              mainblog.classList.remove('dark-mode');
+            }
+            const botonesSVG = document.querySelectorAll('.side-menu svg');
+            botonesSVG.forEach(boton => {
+              boton.classList.remove('dark-mode');
+            });
+            const textoSVG = document.querySelectorAll('.side-menu a');
+            textoSVG.forEach(boton => {
+              boton.classList.remove('dark-mode');
+            });
+            const activoSVG = document.querySelectorAll('sidebar-link:hover');
+            activoSVG.forEach(boton => {
+              boton.classList.remove('dark-mode');
+            });
+            const activadoSVG = document.querySelectorAll('.sidebar-link.is-active');
+            activadoSVG.forEach(boton => {
+              boton.classList.remove('dark-mode');
+            });
+            const messageRightElements = document.querySelectorAll('.message-right');
+            messageRightElements.forEach(messageRightElement => {
+              messageRightElement.classList.remove('dark-mode');
+            });
+          }
+        });
+      });
+    </script>
+
   </body>
 </html>

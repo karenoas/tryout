@@ -31,6 +31,9 @@ html {
 }
 
 img {
+  cursor: pointer;
+  width: 100%;
+  border-radius: 3px;
     max-width: 100%;
 }
 
@@ -259,35 +262,36 @@ body:before {
     flex-grow: 1;
 }
 
-.header {
-    display: flex;
-    align-items: center;
-    flex-shrink: 0;
-    padding: 30px;
-}
+  .header {
+      display: flex;
+      align-items: center;
+      flex-shrink: 0;
+      padding: 30px;
+  }
 
-.search-bar {
-    height: 34px;
-    display: flex;
-    width: 100%;
-    max-width: 450px;
-}
+  .search-bar {
+      height: 34px;
+      display: flex;
+      width: 100%;
+      max-width: 450px;
+  }
 
-.search-bar input {
-  width: 100%;
-  height: 100%;
-  border: none;
-  border-radius: 8px;
-  font-family: var(--body-font);
-  font-size: 14px;
-  font-weight: 500;
-  padding: 0 40px 0 16px;
-  box-shadow: 0 0 0 2px rgba(134, 140, 160, 0.02);
-  background-image: url(data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 56.966 56.966' fill='%23717790c7'%3e%3cpath d='M55.146 51.887L41.588 37.786A22.926 22.926 0 0046.984 23c0-12.682-10.318-23-23-23s-23 10.318-23 23 10.318 23 23 23c4.761 0 9.298-1.436 13.177-4.162l13.661 14.208c.571.593 1.339.92 2.162.92.779 0 1.518-.297 2.079-.837a3.004 3.004 0 00.083-4.242zM23.984 6c9.374 0 17 7.626 17 17s-7.626 17-17 17-17-7.626-17-17 7.626-17 17-17z'/%3e%3c/svg%3e);
-  background-size: 14px;
-  background-repeat: no-repeat;
-  background-position: 96%;
-}
+  .search-bar input {
+      width: 100%;
+      height: 100%;
+      border: none;
+      border-radius: 8px;
+      font-family: var(--body-font);
+      font-size: 14px;
+      font-weight: 500;
+      padding: 0 40px 0 16px;
+      box-shadow: 0 0 0 2px rgba(134, 140, 160, 0.02);
+      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 56.966 56.966' fill='%23717790c7'%3e%3cpath d='M55.146 51.887L41.588 37.786A22.926 22.926 0 0046.984 23c0-12.682-10.318-23-23-23s-23 10.318-23 23 10.318 23 23 23c4.761 0 9.298-1.436 13.177-4.162l13.661 14.208c.571.593 1.339.92 2.162.92.779 0 1.518-.297 2.079-.837a3.004 3.004 0 00.083-4.242zM23.984 6c9.374 0 17 7.626 17 17s-7.626 17-17 17-17-7.626-17-17 7.626-17 17-17z'/%3e%3c/svg%3e");
+      background-size: 14px;
+      background-repeat: no-repeat;
+      background-position: 96%;
+      color: #fff;
+  }
 
 .user-settings {
     display: flex;
@@ -313,15 +317,15 @@ body:before {
 }
 
 .user-settings .notify svg {
-    width: 20px;
-    margin-left: 4px;
+    width: 23px;
+    margin-left: 8px;
     flex-shrink: 0;
   margin-top: 5px;
 }
   
   img.poster-img {
       padding: 10px;
-      border-radius: 40px;
+      border-radius: 18px;
   }
   
 .user-settings .notify .notification {
@@ -351,8 +355,8 @@ body:before {
 }
 
 .user-name {
-    color: #fff;
-    font-size: 14px;
+    color: #ffffff7a;
+    font-size: 10px;
     margin: 0 6px 0 12px;
 }
 
@@ -402,7 +406,7 @@ body:before {
 .main-blog__author {
     display: flex;
     align-items: center;
-    padding-bottom: 10px;
+    padding-bottom: 0px;
 }
 
 .main-blog__author.tips {
@@ -411,12 +415,7 @@ body:before {
 }
 
 .main-blog__title {
-    font-size: 25px;
-    max-width: -2ch;
-    font-weight: 600;
-    letter-spacing: 1px;
-    color: #fff;
-    margin-bottom: 30px;
+  display: none;
 }
 
 .main-blog {
@@ -424,8 +423,8 @@ body:before {
     background-position-x: center;
     display: flex;
     flex-direction: column;
-    width: 65%;
-    padding: 30px;
+    width: auto + 10px;
+    padding: 15px;
     border-radius: 20px;
     align-self: stretch;
     overflow: hidden;
@@ -495,6 +494,7 @@ body:before {
 }
 
 .author-img__wrapper {
+  margin-top: -10px;
     position: relative;
     flex-shrink: 0;
 }
@@ -512,14 +512,14 @@ body:before {
 }
 
 .author-name {
-    font-size: 15px;
+    font-size: 12px;
     color: #fff;
     font-weight: 500;
     margin-bottom: 8px;
 }
 
 .author-info {
-    font-size: 13px;
+    font-size: 9px;
     font-weight: 400;
     color: #fff;
 }
@@ -543,16 +543,16 @@ body:before {
 }
 
 .videos {
-  background-color: rgba(0, 0, 0, 0.5);
-  padding: 20px;
-  border-radius: 40px;
-  margin-top: 10px;
-    display: grid;
-    width: 40%;
-  grid-gap: 1px;
-    grid-template-columns: repeat(4, 1fr);
-  margin-bottom: 80px;
-}
+  background-color: rgba(0, 0, 0, 0.2);
+      padding: 20px;
+      border-radius: 40px;
+      margin-top: 10px;
+      display: grid;
+      width: 100%;
+      grid-gap: 5px;
+      grid-template-columns: repeat(4, 1fr);
+      margin-bottom: 80px;
+  }
 
 @media screen and (max-width: 980px) {
     .videos {
@@ -620,7 +620,7 @@ body:before {
   padding: 3px 8px;
   font-size: 9px;
   border-radius: 6px;
-  top: 73%;
+  top: 89%;
   z-index: 1;
   right: 2%;
 }
@@ -745,6 +745,43 @@ video {
 }
 
 @media screen and (max-width: 650px) {
+  .author-detail {
+      margin-left: 5vw;
+  }
+  .main-blog__author {
+      flex-direction: row;
+      align-items: center;
+    padding-bottom: 1;
+  }
+  .main-blog__title {
+      display: none;
+  }
+  .main-blog{
+      width: 50%;
+      padding: 8px;
+  }
+  .author-info {
+      font-size: 8px;
+      font-weight: 400;
+      color: #fff;
+  }
+  .author-name {
+      font-size: 10px;
+  }
+  .author-img {
+      width: 30px;
+      height: 30px;
+      border: 1px solid rgba(255, 255, 255, 0.75);
+      padding: 4px;
+    margin-left: 5px;
+      border-radius: 50%;
+      -o-object-fit: cover;
+      object-fit: cover;
+  }
+  .main-blog .author-img {
+      margin-top: 14px;
+      margin-right: 10px;
+  }
     .video-p-wrapper {
         flex-direction: column;
     }
@@ -1002,25 +1039,26 @@ video {
     color: #6c6e78;
 }
 
-.send-comment-btn {
-    content: "";
-    position: absolute;
-    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg viewBox='0 0 24 24' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M21.435 2.582a1.933 1.933 0 00-1.93-.503L3.408 6.759a1.92 1.92 0 00-1.384 1.522c-.142.75.355 1.704 1.003 2.102l5.033 3.094a1.304 1.304 0 001.61-.194l5.763-5.799a.734.734 0 011.06 0c.29.292.29.765 0 1.067l-5.773 5.8c-.428.43-.508 1.1-.193 1.62l3.075 5.083c.36.604.98.946 1.66.946.08 0 .17 0 .251-.01.78-.1 1.4-.634 1.63-1.39l4.773-16.075c.21-.685.02-1.43-.48-1.943z'/%3e%3c/svg%3e");
-    background-repeat: no-repeat;
-    background-size: 14px;
-    background-position: center;
-    width: 18px;
-    height: 18px;
-    background-color: #6c5ecf;
-    padding: 4px;
-    border-radius: 50%;
-    right: 16px;
-}
+  .send-comment-btn {
+      content: "";
+      position: absolute;
+      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg viewBox='0 0 24 24' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M21.435 2.582a1.933 1.933 0 00-1.93-.503L3.408 6.759a1.92 1.92 0 00-1.384 1.522c-.142.75.355 1.704 1.003 2.102l5.033 3.094a1.304 1.304 0 001.61-.194l5.763-5.799a.734.734 0 011.06 0c.29.292.29.765 0 1.067l-5.773 5.8c-.428.43-.508 1.1-.193 1.62l3.075 5.083c.36.604.98.946 1.66.946.08 0 .17 0 .251-.01.78-.1 1.4-.634 1.63-1.39l4.773-16.075c.21-.685.02-1.43-.48-1.943z'/%3e%3c/svg%3e");
+      background-repeat: no-repeat;
+      background-size: 12px;
+      background-position: center;
+      width: 20px;
+      height: 20px;
+      background-color: #6c5ecf;
+      padding: 4px;
+      border-radius: 50%;
+      right: 16px;
+  }
 
-.chat-vid__title {
-    color: #fff;
-    font-size: 18px;
-}
+  .chat-vid__title {
+      color: #ffffff54; /* Color del texto */
+      font-size: 18px; /* Tamaño de la fuente */
+      opacity: 0.7; /* Valor de opacidad (entre 0 y 1) */
+  }
 
 .chat-vid__container {
     margin-top: 40px;
@@ -1255,12 +1293,25 @@ button.vjs-play-control.vjs-control.vjs-button {
 
     .main-blog,
     .main-blog+.main-blog {
-        width: 100%;
+        width: auto;
+      padding: 10px;
     }
 
     .videos {
-        grid-template-columns: 1fr;
+      width: 100%;
+        grid-template-columns: repeat(4, 1fr)
     }
+  .video-time {
+      position: absolute;
+      background: rgba(21, 13, 13, 0.44);
+      color: rgba(255, 255, 255, 0.85);
+      padding: 2px 7px;
+      font-size: 6px;
+      border-radius: 6px;
+      top: 73%;
+      z-index: 1;
+      right: 2%;
+  }
 
     .main-blog+.main-blog {
         margin-left: 0;
@@ -1271,21 +1322,21 @@ button.vjs-play-control.vjs-control.vjs-button {
 
 @media screen and (max-width: 475px) {
     .main-blog__title {
-        font-size: 20px;
+        display: none;
     }
 
     .author-name {
-        font-size: 14px;
+        font-size: 10px;
     }
 
     .main-blog__author {
-        flex-direction: column-reverse;
-        align-items: flex-start;
+        flex-direction: row;
+        align-items: center;
     }
 
-    .author-detail {
-        margin-left: 0;
-    }
+  .author-detail {
+      margin-left: 2px;
+  }
 
     .main-blog .author-img {
         margin-top: 14px;
@@ -1338,7 +1389,7 @@ button.vjs-play-control.vjs-control.vjs-button {
       grid-gap: 1px;
       /* Estilos para los elementos del bucle en dispositivos móviles */
       /* Ajusta el tamaño de los elementos según sea necesario */
-      width: 35%; /* Por ejemplo, puedes ajustar el ancho al 50% del contenedor */
+      width: 100%; /* Por ejemplo, puedes ajustar el ancho al 50% del contenedor */
       /* Otros estilos específicos para dispositivos móviles */
     }
   }
@@ -1492,6 +1543,7 @@ button.vjs-play-control.vjs-control.vjs-button {
 <span class="logo"><img class="logo" src="{{ url_for('static', filename='Aureal.gif') }}" />
 </span>
         <a class="logo-expand" href="#">Aureal</a>
+  <a class="user-name" href="{{ url_for('profile') }}" style="margin-left: 0;text-decoration: none; text-transform: capitalize;">@{{ username }}</a>
 
 
 <div class="side-wrapper">
@@ -1520,7 +1572,7 @@ button.vjs-play-control.vjs-control.vjs-button {
   </script>
   
 <div class="side-menu">
-                <a class="sidebar-link discover is-active" href="home">
+                <a class="sidebar-link discover is-active" href="/home">
                     <svg viewBox="0 0 24 24" fill="currentColor">
 
 
@@ -1528,7 +1580,7 @@ button.vjs-play-control.vjs-control.vjs-button {
                     </svg>
                     Para ti
                 </a>
-                <a class="sidebar-link trending" href="#">
+                <a class="sidebar-link trending" href="/likeds">
                     <svg viewBox="0 0 24 24" fill="currentColor">
 
 
@@ -1536,7 +1588,7 @@ button.vjs-play-control.vjs-control.vjs-button {
                     </svg>
                     Me Gusta
                 </a>
-                <a class="sidebar-link" href="post">
+                <a class="sidebar-link" href="/post">
                     <svg viewBox="0 0 24 24" fill="currentColor">
 
 
@@ -1544,7 +1596,7 @@ button.vjs-play-control.vjs-control.vjs-button {
                     </svg>
                     Postear
                 </a>
-                <a class="sidebar-link" href="chat">
+                <a class="sidebar-link" href="/chat">
                     <svg viewBox="0 0 24 24" fill="currentColor">
 
 
@@ -1574,17 +1626,16 @@ button.vjs-play-control.vjs-control.vjs-button {
 
 
 <div class="side-menu">
-  <a class="sidebar-link" href="admin">
-      <svg viewBox="0 0 24 24" fill="currentColor">
-          <path fill-rule="evenodd" clip-rule="evenodd" d="m8,12c-3.309,0-6-2.691-6-6S4.691,0,8,0s6,2.691,6,6-2.691,6-6,6Zm14.5,6c0-.46-.089-.895-.218-1.313l1.416-.816-.998-1.733-1.411.813c-.605-.652-1.393-1.125-2.289-1.33v-1.621h-2v1.621c-.896.205-1.685.678-2.289,1.33l-1.411-.813-.998,1.733,1.416.816c-.129.418-.218.853-.218,1.313s.089.895.218,1.313l-1.416.816.998,1.733,1.411-.813c.605.652,1.393,1.125,2.289,1.33v1.621h2v-1.621c.896-.205,1.685-.678,2.289-1.33l1.411.813.998-1.733-1.416-.816c.129-.418.218-.853.218-1.313Zm-4.5,1.5c-.827,0-1.5-.673-1.5-1.5s.673-1.5,1.5-1.5,1.5.673,1.5,1.5-.673,1.5-1.5,1.5Zm-8-1.5c0-1.459.397-2.822,1.079-4h-6.579c-2.481,0-4.5,2.019-4.5,4.5v5.5h12.721c-1.665-1.466-2.721-3.607-2.721-6Z" />
-      </svg>
-      {% if session.username == 'Miguel N.' %}
-          <span style="color: red;">Panel (Mod {{ username }})</span>
-      {% else %}
-          V-Moderador
-      {% endif %}
-      <i class="fas fa-eye"></i>
-  </a>
+  {% if session.username == 'Miguel N.' %}
+      <a class="sidebar-link" href="/admin">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="m8,12c-3.309,0-6-2.691-6-6S4.691,0,8,0s6,2.691,6,6-2.691,6-6,6Zm14.5,6c0-.46-.089-.895-.218-1.313l1.416-.816-.998-1.733-1.411.813c-.605-.652-1.393-1.125-2.289-1.33v-1.621h-2v1.621c-.896.205-1.685.678-2.289,1.33l-1.411-.813-.998,1.733,1.416.816c-.129.418-.218.853-.218,1.313s.089.895.218,1.313l-1.416.816.998,1.733,1.411-.813c.605.652,1.393,1.125,2.289,1.33v1.621h2v-1.621c.896-.205,1.685-.678,2.289-1.33l1.411.813.998-1.733-1.416-.816c.129-.418.218-.853.218-1.313Zm-4.5,1.5c-.827,0-1.5-.673-1.5-1.5s.673-1.5,1.5-1.5,1.5.673,1.5,1.5-.673,1.5-1.5,1.5Zm-8-1.5c0-1.459.397-2.822,1.079-4h-6.579c-2.481,0-4.5,2.019-4.5,4.5v5.5h12.721c-1.665-1.466-2.721-3.607-2.721-6Z" />
+          </svg>
+          <span style="color: red;">Panel (Mod {{ session.username }})</span>
+          <i class="fas fa-eye"></i>
+      </a>
+  {% endif %}
+
                 <a class="sidebar-link" href="#">
                   <div class="notification">
                   </div>
@@ -1615,21 +1666,23 @@ button.vjs-play-control.vjs-control.vjs-button {
         <input type="text" name="username" id="searchInput" placeholder="Buscar en aureal">
     </form>
 </div>
+ 
 <div class="user-settings">
   {% if user_profile_picture %}
-    <img class="user-img" src="{{ url_for('uploaded_file', filename='prof_pics/' + username + '.jpg') }}"  alt="">
+      <a href="/profile">
+          <img class="user-img" src="{{ url_for('uploaded_file', filename='prof_pics/' + username + '.jpg') }}"  alt="">
+      </a>
   {% else %}
-    <img class="user-img" src="{{ url_for('uploaded_file', filename='prof_pics/vendetta.jpg') }}" alt="Vendetta">
+      <a href="/profile">
+          <img class="user-img" src="{{ url_for('uploaded_file', filename='prof_pics/vendetta.jpg') }}" alt="Vendetta">
+      </a>
   {% endif %}
-  <a class="user-name" href="{{ url_for('profile') }}" style="text-decoration: none;">{{ username }}</a>
-
-               <label class="ui-switch">
-                 <input type="checkbox">
-                 <div class="slider">
-                   <div class="circle"></div>
-                 </div>
-               </label>
-
+  <label class="ui-switch">
+     <input type="checkbox">
+     <div class="slider">
+       <div class="circle"></div>
+     </div>
+   </label>
   <a class="notify" href="{{ url_for('logout') }}">
                     <svg viewBox="0 0 24 24" fill="currentColor">
 
@@ -1760,7 +1813,7 @@ button.vjs-play-control.vjs-control.vjs-button {
 <div class="video-p-wrapper anim" style="--delay: .1s">
 
 
-<div class="author-img__wrapper video-author video-p">
+<div style="margin-top: 3px;" class="author-img__wrapper video-author video-p">
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check">
 
 
@@ -1776,18 +1829,29 @@ button.vjs-play-control.vjs-control.vjs-button {
 <div class="video-p-detail">
 
 
-<div class="video-p-name">
+<div style="margin-bottom: 3px"class="video-p-name">
 </div>
 
 
-<div class="video-p-sub">Posteado recientemente
-</div>
+<div style="font-size: 12px;" class="video-p-desc"></div>
 
 </div>
-
-
+  <script>
+    function copyURL() {
+      var posterImg = document.querySelector('img.poster-img');
+      var alt = posterImg ? posterImg.alt : '';
+      var baseURL = "https://aureal.onrender.com/shared/";
+      var url = baseURL + alt; // Construye la URL completa
+      navigator.clipboard.writeText(url).then(function() {
+        console.log('URL copiada al portapapeles: ' + url);
+        // Aquí puedes agregar cualquier otra acción o mensaje de éxito
+      }, function(err) {
+        console.error('No se pudo copiar la URL: ', err);
+      });
+    }
+  </script>
 <div class="button-wrapper">
-                                    <button class="like">
+                                    <button class="like" onclick="copyURL()">
                                         <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
 
 
@@ -1811,7 +1875,6 @@ button.vjs-play-control.vjs-control.vjs-button {
 </div>
 
   <div class="video-p-subtitle anim" style="--delay: .3s">
-    <div class="video-description"></div>
   </div>
 
 
@@ -1860,7 +1923,7 @@ button.vjs-play-control.vjs-control.vjs-button {
     <!-- Input para escribir un nuevo comentario -->
     <input type="text" placeholder="Write your message">
     <!-- Botón para enviar el comentario -->
-    <button class="send-comment-btn"></button>
+    <a class="send-comment-btn"></a>
   </div>
 </div>
 
@@ -2055,7 +2118,8 @@ $(".discover").addClass("is-active");
         $(".video-stream .poster-img").attr("alt", imageName);
         $(".video-p-title").text(title);
         $(".video-p-name").text(person);
-        $(".video-detail .author-img").attr("src", img);
+        var authorImgSrc = "{{ url_for('uploaded_file', filename='prof_pics/') }}" + person + ".jpg";
+        $(".video-detail .author-img").attr("src", authorImgSrc);
         console.log("Nombre del autor:", person);
         // Realizar una solicitud AJAX para obtener la descripción
         $.ajax({
@@ -2063,7 +2127,7 @@ $(".discover").addClass("is-active");
           type: "GET",
           data: {image_name: imageName},
           success: function(response) {
-            $(".video-description").text(response.description);
+            $(".video-p-desc").text(response.description);
           },
           error: function(xhr, status, error) {
             console.error(error);
@@ -2259,10 +2323,30 @@ $(".discover").addClass("is-active");
         if (container) {
           container.classList.add('dark-mode');
         }
+        const mainblog = document.querySelector('.main-blog');
+        if (mainblog) {
+          mainblog.classList.add('dark-mode');
+        }
         const botonesSVG = document.querySelectorAll('.side-menu svg');
         botonesSVG.forEach(boton => {
           boton.classList.add('dark-mode');
         });
+        const textoSVG = document.querySelectorAll('.side-menu a');
+        textoSVG.forEach(boton => {
+          boton.classList.add('dark-mode');
+        });
+        const activoSVG = document.querySelectorAll('sidebar-link:hover');
+        activoSVG.forEach(boton => {
+          boton.classList.add('dark-mode');
+        });
+        const activadoSVG = document.querySelectorAll('.sidebar-link.is-active');
+        activadoSVG.forEach(boton => {
+          boton.classList.add('dark-mode');
+        });
+        const busqueda = document.querySelector('.search-bar input');
+        if (busqueda) {
+          busqueda.classList.add('dark-mode');
+        }
       }
 
       // Agregar un listener para el cambio de estado del interruptor

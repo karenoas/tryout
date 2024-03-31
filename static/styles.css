@@ -6,7 +6,12 @@ body {
   background-color: rgb(244 244 247 / 39%);
   transition: background-color 0.3s ease;
 }
-
+.success__description {
+    margin-top: 10px; /* Espacio superior */
+    font-size: 16px; /* Tamaño de fuente */
+    color: #333; /* Color del texto */
+    /* Otros estilos según tus preferencias */
+}
 /* Estilos para el modo oscuro */
 body.dark-mode {
     background-image: url("https://e1.pxfuel.com/desktop-wallpaper/191/382/desktop-wallpaper-4526175-art-background-fuji-minimalist-black-landscape.jpg");
@@ -28,6 +33,16 @@ body.dark-mode {
 body.dark-mode {
     background-image: url("https://e1.pxfuel.com/desktop-wallpaper/191/382/desktop-wallpaper-4526175-art-background-fuji-minimalist-black-landscape.jpg");
     /* Otros estilos específicos del modo oscuro */
+}
+#send-button:hover svg path {
+    fill: #ffffff;
+    stroke: white;
+    transition: all 0.3s;
+}
+#send-button:hover svg path.dark-mode {
+    fill: #000000;
+    stroke: black;
+    transition: all 0.3s;
 }
 .side-menu svg {
   transition: background-color 0.3s ease;
@@ -71,6 +86,7 @@ body.dark-mode {
     margin-right: 16px;
 }
 .main-blog {
+  
   background-color: rgb(133 133 133 / 52%);
     /* Otros estilos de fondo */
   transition: background-color 0.3s ease;
@@ -108,6 +124,7 @@ body.dark-mode {
 }
 
 .slider {
+  margin-left: 6px;
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
@@ -173,4 +190,13 @@ body.dark-mode {
   opacity: 1;
   width: 0;
   height: 0;
+}
+
+.message-right {
+  color: white;
+  background-color: #0d6efd;
+}
+.message-right.dark-mode {
+  color: white;
+  background-color: #fd0dd5;
 }

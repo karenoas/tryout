@@ -1,4 +1,5 @@
-from flask import Flask, render_template, request, jsonify, send_from_directory, redirect, url_for, session, flash, get_flashed_messages
+from flask import Flask, render_template, request, jsonify, send_from_directory, redirect, url_for, session, flash, get_flashed_messages, abort
+import random
 import os
 import secrets
 import string
@@ -6,7 +7,6 @@ import json
 import sqlite3
 import shutil
 from flask_socketio import SocketIO, emit, join_room
-from datetime import datetime
 
 
 app = Flask(__name__)
@@ -26,6 +26,10 @@ def check_authorization(f):
   return decorated_function
 # Modifica la función like() para devolver el recuento actualizado de likes
 # Modifica la función like() para devolver el recuento actualizado de likes
+@app.errorhandler(404)
+def page_not_found(error):
+    return render_template('404.html'), 404
+  
 @app.route('/loading')
 def loading():
     return render_template('loading.html')
@@ -141,7 +145,7 @@ def create_db():
     c = conn.cursor()
     c.execute('''CREATE TABLE IF NOT EXISTS usuarios
                  (id INTEGER PRIMARY KEY AUTOINCREMENT, 
-                 username TEXT, password TEXT)''')
+                 username TEXT, email TEXT, password TEXT)''')
 
     c.execute('''CREATE TABLE IF NOT EXISTS imagenes
                  (id INTEGER PRIMARY KEY AUTOINCREMENT, 
@@ -190,7 +194,13 @@ create_db()
 
 
 
-
+@app.route('/login')
+def logpage():
+  return render_template('login.html')
+@app.route('/register')
+def landingpage():
+    return render_template('landing.html')
+  
 @app.route('/')
 def index():
     if 'username' in session:
@@ -199,7 +209,7 @@ def index():
     else:
         # Si no hay una sesión activa, renderiza la plantilla de inicio de sesión
         flash_messages = get_flashed_messages(with_categories=True)
-        return render_template('login.html', flash_messages=flash_messages)
+        return render_template('landing.html', flash_messages=flash_messages)
 
 @app.route('/obtener_columnas', methods=['GET'])
 def obtener_columnas():
@@ -848,6 +858,7 @@ def registro():
                     'No se han proporcionado datos JSON válidos'}), 400
 
   username = data.get('username')
+  email = data.get('email')
   password = data.get('password')
 
   conn = sqlite3.connect(DATABASE)
@@ -858,12 +869,11 @@ def registro():
     conn.close()
     return jsonify({'error': 'El usuario ya está registrado'}), 400
 
-  c.execute("INSERT INTO usuarios (username, password) VALUES (?, ?)",
-            (username, password))
+  c.execute("INSERT INTO usuarios (username, email, password) VALUES (?, ?, ?)",
+            (username, email, password))
   conn.commit()
   conn.close()
-
-  return jsonify({'message': 'Te has registrado en rollers'}), 200
+  return jsonify({'message': 'Te has registrado en rollers'}), 200  
 PROFILE_PICS_FOLDER = os.path.join(app.config['UPLOAD_FOLDER'], 'prof_pics')
 
 @app.route('/home')
@@ -874,7 +884,7 @@ def newone():
     for filename in os.listdir(app.config['UPLOAD_FOLDER']):
         if filename.startswith('A-'):
             images.append(filename)
-
+    shuffled_images = random.sample(images, len(images))
     likes_count_dict = {}
     comments_dict = {}
     img_usernames = {}
@@ -924,9 +934,8 @@ def newone():
         user_profile_picture = url_for('uploaded_file', filename=f'prof_pics/{username}.jpg')
 
     conn.close()
-
     return render_template('newone.html',
-                           images=images,
+                           images=shuffled_images,
                            titles=titles,
                            descriptions=descriptions_dict,
                            likes_count_dict=likes_count_dict,
@@ -935,7 +944,147 @@ def newone():
                            username=username,
                            user_profile_picture=user_profile_picture)
 
+@app.route('/shared/<image_id>')
+def shared(image_id):
+    username = session.get('username')  # Utiliza get para evitar errores si 'username' no está en la sesión
+    images = []
 
+    # Obtener todas las imágenes del directorio de subidas que coincidan con el prefijo 'A-'
+    for filename in os.listdir(app.config['UPLOAD_FOLDER']):
+        if filename.startswith('A-'):
+            images.append(filename)
+
+    if image_id in images:
+        # Obtener la información específica de la imagen solicitada
+        shuffled_images = [image_id]  # La lista de imágenes solo contendrá la imagen solicitada
+        likes_count_dict = {}
+        comments_dict = {}
+        img_usernames = {}
+        descriptions_dict = {}
+
+        conn = sqlite3.connect(DATABASE)
+        c = conn.cursor()
+
+        # Obtener el recuento de likes para la imagen solicitada
+        c.execute("SELECT COUNT(*) FROM likes WHERE image_id=?", (image_id,))
+        likes_count = c.fetchone()[0]
+        likes_count_dict[image_id] = likes_count
+
+        # Obtener los comentarios para la imagen solicitada
+        c.execute(
+            "SELECT username, comment_text, user_profile_picture FROM comments WHERE image_id=?",
+            (image_id,))
+        comments = [{
+            'username': row[0],
+            'comment_text': row[1],
+            'user_profile_picture': row[2]
+        } for row in c.fetchall()]
+        comments_dict[image_id] = comments
+
+        # Obtener el nombre de usuario y la descripción para la imagen solicitada
+        c.execute("SELECT username, description FROM imagenes WHERE filename=?", (image_id,))
+        result = c.fetchone()
+        if result:
+            img_username, description = result
+            img_usernames[image_id] = img_username
+            descriptions_dict[image_id] = description
+        else:
+            img_usernames[image_id] = ""
+            descriptions_dict[image_id] = ""
+
+        # Verificar si el usuario tiene una imagen de perfil
+        user_profile_picture = os.path.join(PROFILE_PICS_FOLDER, f"{username}.jpg")
+        if not os.path.exists(user_profile_picture):
+            vendetta_image = os.path.join(PROFILE_PICS_FOLDER, "vendetta.jpg")
+            vendetta_user_image = os.path.join(PROFILE_PICS_FOLDER, f"{username}.jpg")
+            shutil.copy(vendetta_image, vendetta_user_image)
+            user_profile_picture = url_for('uploaded_file', filename=f'prof_pics/{username}.jpg')
+
+        conn.close()
+
+        # Renderizar la plantilla compartida con la información de la imagen solicitada
+        return render_template('shared.html',
+                               image_id=image_id,
+                               images=shuffled_images,
+                               titles=titles,
+                               descriptions=descriptions_dict, likes_count_dict=likes_count_dict,
+                               comments_dict=comments_dict,
+                               img_usernames=img_usernames,
+                               username=username,
+                               user_profile_picture=user_profile_picture)
+    else:
+        return redirect('/404.html')
+
+@app.route('/likeds')
+def likepage():
+      username = session['username']
+
+      conn = sqlite3.connect(DATABASE)
+      c = conn.cursor()
+
+      # Obtener las imágenes que tienen un registro en la tabla likes con el nombre de usuario de la sesión
+      c.execute("""
+          SELECT image_id
+          FROM likes
+          WHERE user_id = ?
+      """, (username,))
+      liked_images = [row[0] for row in c.fetchall()]
+
+      # Obtener información específica de las imágenes que han sido gustadas por el usuario
+      likes_count_dict = {}
+      comments_dict = {}
+      img_usernames = {}
+      descriptions_dict = {}
+
+      for image_id in liked_images:
+          # Obtener el recuento de likes para la imagen actual
+          c.execute("SELECT COUNT(*) FROM likes WHERE image_id=?", (image_id,))
+          likes_count = c.fetchone()[0]
+          likes_count_dict[image_id] = likes_count
+
+          # Obtener los comentarios para la imagen actual
+          c.execute(
+              "SELECT username, comment_text, user_profile_picture FROM comments WHERE image_id=?",
+              (image_id,))
+          comments = [{
+              'username': row[0],
+              'comment_text': row[1],
+              'user_profile_picture': row[2]
+          } for row in c.fetchall()]
+          comments_dict[image_id] = comments
+
+          # Obtener el nombre de usuario y la descripción para la imagen actual
+          c.execute("SELECT username, description FROM imagenes WHERE filename=?", (image_id,))
+          result = c.fetchone()
+          if result:
+              img_username, description = result
+              img_usernames[image_id] = img_username
+              descriptions_dict[image_id] = description
+          else:
+              img_usernames[image_id] = ""
+              descriptions_dict[image_id] = ""
+
+      # Verificar si el usuario tiene una imagen de perfil
+      user_profile_picture = os.path.join(PROFILE_PICS_FOLDER, f"{username}.jpg")
+      if not os.path.exists(user_profile_picture):
+          vendetta_image = os.path.join(PROFILE_PICS_FOLDER, "vendetta.jpg")
+          vendetta_user_image = os.path.join(PROFILE_PICS_FOLDER, f"{username}.jpg")
+          shutil.copy(vendetta_image, vendetta_user_image)
+          user_profile_picture = url_for('uploaded_file', filename=f'prof_pics/{username}.jpg')
+
+      conn.close()
+
+      return render_template('likes.html',
+                             images=liked_images,
+                             titles=titles,
+                             descriptions=descriptions_dict,
+                             likes_count_dict=likes_count_dict,
+                             comments_dict=comments_dict,
+                             img_usernames=img_usernames,
+                             username=username,
+                             user_profile_picture=user_profile_picture)
+
+  
 @app.route('/post')
 def render_index():
   if 'username' not in session:
@@ -970,14 +1119,14 @@ def login():
 
   username = data.get('username')
   password = data.get('password')
-
+  
   conn = sqlite3.connect('usuarios.db')
   c = conn.cursor()
   c.execute("SELECT * FROM usuarios WHERE username=? AND password=?",
             (username, password))
   user = c.fetchone()
   conn.close()
-
+  
   if user:
     session[
         'username'] = username  # Almacena el nombre de usuario en la sesión
@@ -992,8 +1141,7 @@ def login():
 
   # Dentro del bloque donde registras el like:
   c.execute("INSERT INTO likes (user_id, image_id) VALUES (?, ?)",
-            (username, product_id))
-
+    (username, product_id))
   # En la función 'logout()':
   session.pop(
       'username',
@@ -1003,9 +1151,6 @@ def login():
   username = session.get(
       'username')  # Obtener el nombre de usuario de la sesión
   return render_template('loading.html',
-                         images=images,
-                         titles=titles,
-                         likes_count_dict=likes_count_dict,
                          username=username)
 
 
@@ -1059,5 +1204,6 @@ def comments():
 
 
 if __name__ == '__main__':
-  socketio.run(app, host='0.0.0.0')
+  socketio.run(app, host='0.0.0.0', allow_unsafe_werkzeug=True)
+
 
