@@ -14,6 +14,14 @@
         "index": 31919
       }
     ],
+    "templates/landing.html": [
+      {
+        "id": "16eb505f-cb02-4da6-90ea-0574cde70ea1",
+        "line": 9,
+        "version": 1685,
+        "index": 293
+      }
+    ],
     "templates/newone.html": [
       {
         "id": "2f4f3b5e-ad0b-45fd-b319-e818ad644589",
