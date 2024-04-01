@@ -21,6 +21,14 @@
         "version": 3859,
         "index": 0
       }
+    ],
+    "templates/shared.html": [
+      {
+        "id": "24bd65fe-4524-4a16-83fe-c07a137340eb",
+        "line": 1622,
+        "version": 314,
+        "index": 35605
+      }
     ]
   }
 }
