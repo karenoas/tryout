@@ -4,29 +4,29 @@
       {
         "id": "38aabe13-b4d1-4a88-ad5c-0f53f1b5eca6",
         "line": 31,
-        "version": 2809,
+        "version": 2864,
         "index": 1085
       },
       {
         "id": "561e77c4-9799-4329-999a-69c6e78d2629",
         "line": 961,
-        "version": 2809,
-        "index": 31919
+        "version": 2864,
+        "index": 31913
       }
     ],
     "templates/landing.html": [
       {
         "id": "16eb505f-cb02-4da6-90ea-0574cde70ea1",
         "line": 9,
-        "version": 1685,
-        "index": 293
+        "version": 2394,
+        "index": 362
       }
     ],
     "templates/newone.html": [
       {
         "id": "2f4f3b5e-ad0b-45fd-b319-e818ad644589",
         "line": 1,
-        "version": 3859,
+        "version": 3961,
         "index": 0
       }
     ],

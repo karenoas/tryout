@@ -433,7 +433,7 @@ def upload():
   conn.close()
 
   # Redirigir al usuario a la página de la imagen cargada
-  return redirect(url_for('show_image', product=filename))
+  return redirect(url_for('home', product=filename))
 
 
 @app.route('/uploads/<path:filename>')

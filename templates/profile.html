@@ -569,9 +569,26 @@ body:before {
   }
 
 
-.video-wrapper {
+  .video-wrapper {
     position: relative;
-}
+    width: 200px;
+    height: 200px;
+    overflow: hidden;
+  }
+
+  .video-wrapper::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 200px;
+    height: 200px;
+    background-image: url(ruta_de_la_imagen.jpg);
+    background-size: auto 200px;
+    background-position: center center;
+    transform: translate(-50%, -50%);
+  }
+
 
 .video-name {
     color: #fff;
@@ -2009,6 +2026,34 @@ button.vjs-play-control.vjs-control.vjs-button {
       } else {
           alert("Por favor, ingrese un nombre de usuario para buscar.");
       }
+  }
+  </script>
+  <script>
+    function addProfilePhoto() {
+      // Selecciona el archivo de entrada
+      var input = document.createElement('input');
+      input.type = 'file';
+      input.accept = 'image/*';
+      input.onchange = function() {
+          var formData = new FormData();
+          formData.append('file', input.files[0]);
+
+          $.ajax({
+              url: '/upload_profile_photo',
+              type: 'POST',
+              data: formData,
+              processData: false,
+              contentType: false,
+              success: function(response) {
+                  alert(response);
+                  window.location.reload(); // Recarga la página después de cargar la foto de perfil
+              },
+              error: function(xhr, status, error) {
+                  alert('Error: ' + error);
+              }
+          });
+      };
+      input.click();
   }
   </script>
 <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'>

@@ -456,7 +456,18 @@ body:before {
 .main-blog+.main-blog .author-detail {
     margin-left: 0;
 }
-
+  .videos {
+      background-color: rgba(0, 0, 0, 0.2);
+      padding: 20px;
+      border-radius: 40px;
+      margin-top: 10px;
+      display: grid;
+      width: 100%;
+      grid-gap: 5px;
+      grid-template-columns: repeat(4, 1fr);
+      margin-bottom: 80px;
+  }
+  
 @media screen and (max-width: 905px) {
 
     .main-blog,
@@ -568,9 +579,12 @@ body:before {
   }
 
 
-.video-wrapper {
-    position: relative;
-}
+  .video-wrapper {
+      width: 250px;
+      height: 250px;
+      align-content: center;
+      position: relative;
+  }
 
 .video-name {
     color: #fff;
@@ -622,7 +636,7 @@ body:before {
   border-radius: 6px;
   top: 89%;
   z-index: 1;
-  right: 2%;
+  right: 2%
 }
 
 .video:hover video {
@@ -1287,6 +1301,12 @@ button.vjs-play-control.vjs-control.vjs-button {
 }
 
 @media screen and (max-width: 735px) {
+  .video-wrapper {
+      width: 100px;
+      height: 100px;
+      align-content: center;
+      position: relative;
+  }
     .main-blogs {
         flex-wrap: wrap;
     }
@@ -1299,7 +1319,7 @@ button.vjs-play-control.vjs-control.vjs-button {
 
     .videos {
       width: 100%;
-        grid-template-columns: repeat(4, 1fr)
+        grid-template-columns: repeat(3, 1fr)
     }
   .video-time {
       position: absolute;

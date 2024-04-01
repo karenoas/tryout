@@ -13,3 +13,4 @@ simple-websocket==1.0.0
 websockets==12.0
 Werkzeug==3.0.1
 wsproto==1.2.0
+Pillow==10.3.0
