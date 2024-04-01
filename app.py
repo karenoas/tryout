@@ -386,7 +386,18 @@ def admin():
                            username=username,
                            user_profile_picture=user_profile_picture)
 
+@app.route('/delete_file', methods=['POST'])
+def delete_file():
+    filename = request.form['filename']
+    file_path = os.path.join('uploads', filename)
 
+    # Check if file exists
+    if os.path.exists(file_path):
+        os.remove(file_path)
+        return f'File "{filename}" has been deleted successfully.'
+    else:
+        return f'File "{filename}" does not exist.'
+      
 @app.route('/upload', methods=['POST'])
 def upload():
   if 'image' not in request.files:
@@ -433,7 +444,7 @@ def upload():
   conn.close()
 
   # Redirigir al usuario a la página de la imagen cargada
-  return redirect(url_for('home', product=filename))
+  return redirect(url_for('newone'))
 
 
 @app.route('/uploads/<path:filename>')

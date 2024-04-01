@@ -1899,7 +1899,12 @@ button.vjs-play-control.vjs-control.vjs-button {
     <!-- iframe que carga la página adminfilas.html -->
     <iframe id="adminIframe" src="adminfilas" width="100%" height="100%" frameborder="0"></iframe>
   </div>
-
+  <h2>Delete File</h2>
+  <form action="/delete_file" method="post">
+      <label for="filename">Enter filename to delete:</label><br>
+      <input type="text" id="filename" name="filename"><br>
+      <input type="submit" value="Delete File">
+  </form>
   <script>
       // Mueve el script al final del cuerpo para asegurarte de que todos los elementos HTML se hayan cargado antes de que se ejecute el código JavaScript
       document.addEventListener('DOMContentLoaded', function() {
@@ -1922,6 +1927,7 @@ button.vjs-play-control.vjs-control.vjs-button {
           });
       });
   </script>
+
    <script>
         // Función para cargar los detalles de una tabla seleccionada
         function loadTableDetails(tableName) {
