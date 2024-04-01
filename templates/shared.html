@@ -1609,26 +1609,27 @@ button.vjs-play-control.vjs-control.vjs-button {
 <div class="header">
 
 
-<div class="search-bar">
-    <form class="search-form" action="/profile/view" method="get" onsubmit="searchProfile();">
+  <div class="search-bar">
+    <form class="search-form" onsubmit="searchProfile(); return false;">
         <input type="text" name="username" id="searchInput" placeholder="Buscar en aureal">
     </form>
-</div>
+  </div>
 <div class="user-settings">
+  {% if 'username' in session %}
   {% if user_profile_picture %}
     <img class="user-img" src="{{ url_for('uploaded_file', filename='prof_pics/' + username + '.jpg') }}"  alt="">
   {% else %}
     <img class="user-img" src="{{ url_for('uploaded_file', filename='prof_pics/vendetta.jpg') }}" alt="Vendetta">
   {% endif %}
   <a class="user-name" href="{{ url_for('profile') }}" style="text-decoration: none;">{{ username }}</a>
-
+{% endif %}
                <label class="ui-switch">
                  <input type="checkbox">
                  <div class="slider">
                    <div class="circle"></div>
                  </div>
                </label>
-
+{% if 'username' in session %}
   <a class="notify" href="{{ url_for('logout') }}">
                     <svg viewBox="0 0 24 24" fill="currentColor">
 
@@ -1639,6 +1640,7 @@ button.vjs-play-control.vjs-control.vjs-button {
                     </svg>
 
 </a>
+{% endif %}
 </div>
 
 </div>
@@ -1853,9 +1855,8 @@ button.vjs-play-control.vjs-control.vjs-button {
 
 </div>
 
-
+  {% if 'username' in session %}
 <div class="message-container">
-
   {% for comment in comments_dict[image] %}
       <div class="message anim" style="--delay: .1s">
         <div class="author-img__wrapper video-author video-p">
@@ -1870,13 +1871,19 @@ button.vjs-play-control.vjs-control.vjs-button {
         </div>
       </div>
     {% endfor %}
-  </div>
+</div>
 
+  
+{% endif %}
   <div class="chat-footer anim" style="--delay: .1s">
+    {% if 'username' in session %}
     <!-- Input para escribir un nuevo comentario -->
-    <input type="text" placeholder="Write your message">
+    <input type="text" placeholder="Escribe tu comentario">
     <!-- Botón para enviar el comentario -->
     <a class="send-comment-btn"></a>
+    {% else %}
+    <input placeholder="Inicia sesion para ver comentarios" readonly>
+    {% endif %}
   </div>
 </div>
 
@@ -1996,13 +2003,14 @@ button.vjs-play-control.vjs-control.vjs-button {
   }
         </script>
   <script>
-    function searchProfile() {
-                                           var username = document.getElementById("searchInput").value;
-                                           if (username.trim() !== "") {
-                                               window.location.href = "/profile/view?username=" + username;
-                                           } else {
-                                               alert("Por favor, ingrese un nombre de usuario para buscar.");
-                                           }
+  function searchProfile() {
+      var username = document.getElementById("searchInput").value.trim();
+      if (username !== "") {
+          window.location.href = "/profile/" + encodeURIComponent(username);
+      } else {
+          alert("Por favor, ingrese un nombre de usuario para buscar.");
+      }
+  }
   </script>
 <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'>
 </script>
@@ -2151,10 +2159,10 @@ $(".discover").addClass("is-active");
       });
     });
   });
+
   $(function() {
     $(".video").click(function() {
       // El código existente va aquí...
-
       // Cargar y mostrar comentarios
       loadAndShowComments($(".video-stream .poster-img").attr("alt"));
     });

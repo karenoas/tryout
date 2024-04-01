@@ -670,6 +670,11 @@ def show_roller():
 @app.route('/profile/<username>/')
 def vista_perfil(username):
 
+  if 'username' not in session:
+    return redirect(
+      url_for('index')
+  ) 
+  
   descriptions_dict = {}
 
   own_username = session.get('username')
@@ -878,6 +883,9 @@ PROFILE_PICS_FOLDER = os.path.join(app.config['UPLOAD_FOLDER'], 'prof_pics')
 
 @app.route('/home')
 def newone():
+    if 'username' not in session:
+        return redirect(url_for('index'))
+
     username = session['username']
 
     images = []
@@ -946,6 +954,7 @@ def newone():
 
 @app.route('/shared/<image_id>')
 def shared(image_id):
+  
     username = session.get('username')  # Utiliza get para evitar errores si 'username' no está en la sesión
     images = []
 

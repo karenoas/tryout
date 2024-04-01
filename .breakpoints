@@ -4,15 +4,21 @@
       {
         "id": "38aabe13-b4d1-4a88-ad5c-0f53f1b5eca6",
         "line": 31,
-        "version": 2788,
+        "version": 2809,
         "index": 1085
+      },
+      {
+        "id": "561e77c4-9799-4329-999a-69c6e78d2629",
+        "line": 961,
+        "version": 2809,
+        "index": 31919
       }
     ],
     "templates/newone.html": [
       {
         "id": "2f4f3b5e-ad0b-45fd-b319-e818ad644589",
         "line": 1,
-        "version": 3804,
+        "version": 3859,
         "index": 0
       }
     ]

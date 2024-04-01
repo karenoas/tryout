@@ -1724,11 +1724,11 @@ button.vjs-play-control.vjs-control.vjs-button {
 <div class="header">
 
 
-<div class="search-bar">
-
-<input type="text" placeholder="Buscar en aureal">
-
-</div>
+  <div class="search-bar">
+    <form class="search-form" onsubmit="searchProfile(); return false;">
+        <input type="text" name="username" id="searchInput" placeholder="Buscar en aureal">
+    </form>
+  </div>
 
 
 <div class="user-settings">
@@ -1810,6 +1810,16 @@ button.vjs-play-control.vjs-control.vjs-button {
 </div>
 
 </div>
+  <script>
+  function searchProfile() {
+      var username = document.getElementById("searchInput").value.trim();
+      if (username !== "") {
+          window.location.href = "/profile/" + encodeURIComponent(username);
+      } else {
+          alert("Por favor, ingrese un nombre de usuario para buscar.");
+      }
+  }
+  </script>
   <script>
       document.addEventListener('DOMContentLoaded', function() {
           document.querySelectorAll('.uiverse').forEach(function(button) {

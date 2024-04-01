@@ -1662,9 +1662,9 @@ button.vjs-play-control.vjs-control.vjs-button {
 
 
 <div class="search-bar">
-    <form class="search-form" action="/profile/view" method="get" onsubmit="searchProfile();">
-        <input type="text" name="username" id="searchInput" placeholder="Buscar en aureal">
-    </form>
+  <form class="search-form" onsubmit="searchProfile(); return false;">
+      <input type="text" name="username" id="searchInput" placeholder="Buscar en aureal">
+  </form>
 </div>
  
 <div class="user-settings">
@@ -2043,13 +2043,14 @@ button.vjs-play-control.vjs-control.vjs-button {
   }
         </script>
   <script>
-    function searchProfile() {
-                                           var username = document.getElementById("searchInput").value;
-                                           if (username.trim() !== "") {
-                                               window.location.href = "/profile/view?username=" + username;
-                                           } else {
-                                               alert("Por favor, ingrese un nombre de usuario para buscar.");
-                                           }
+  function searchProfile() {
+      var username = document.getElementById("searchInput").value.trim();
+      if (username !== "") {
+          window.location.href = "/profile/" + encodeURIComponent(username);
+      } else {
+          alert("Por favor, ingrese un nombre de usuario para buscar.");
+      }
+  }
   </script>
 <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'>
 </script>
