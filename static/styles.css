@@ -1,6 +1,5 @@
 /* Estilos para el fondo predeterminado */
 body {
-    background-image: url("https://e1.pxfuel.com/desktop-wallpaper/191/382/desktop-wallpaper-4526175-art-background-fuji-minimalist-black-landscape.jpg");
     /* Otros estilos de fondo */
   background-blend-mode: color-dodge;
   background-color: rgb(244 244 247 / 39%);
@@ -14,9 +13,8 @@ body {
 }
 /* Estilos para el modo oscuro */
 body.dark-mode {
-    background-image: url("https://e1.pxfuel.com/desktop-wallpaper/191/382/desktop-wallpaper-4526175-art-background-fuji-minimalist-black-landscape.jpg");
   background-blend-mode: color-dodge;
-  background-color: rgba(18, 21, 39, 0.86);
+  background-color: #1b1b1b;
     /* Otros estilos específicos del modo oscuro */
 }
 .container {
@@ -31,7 +29,7 @@ body.dark-mode {
 
 /* Estilos para el modo oscuro */
 body.dark-mode {
-    background-image: url("https://e1.pxfuel.com/desktop-wallpaper/191/382/desktop-wallpaper-4526175-art-background-fuji-minimalist-black-landscape.jpg");
+   
     /* Otros estilos específicos del modo oscuro */
 }
 #send-button:hover svg path {
@@ -65,7 +63,7 @@ body.dark-mode {
     display: flex;
     align-items: center;
     text-decoration: none;
-   color: var(--body-color);
+   color: #5c5c5c;
 }
 .sidebar-link:hover,
 .sidebar-link.is-active {
@@ -80,7 +78,7 @@ body.dark-mode {
 .side-menu svg.dark-mode {
     width: 30px;
     padding: 8px;
-  background-color: var(--button-bg);
+  background-color: rgba(0, 0, 0, 0.4);
     border-radius: 10px;
   flex-shrink: 0;
     margin-right: 16px;

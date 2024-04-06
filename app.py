@@ -6,6 +6,7 @@ import string
 import json
 import sqlite3
 import shutil
+from werkzeug.utils import secure_filename
 from flask_socketio import SocketIO, emit, join_room
 
 
@@ -85,43 +86,51 @@ def get_likes():
   return jsonify(likes)
 
 
+def save_titles(titles):
+  with open('titles.json', 'w') as f:
+      json.dump(titles, f)
+
+def save_precios(precios):
+  with open('precios.json', 'w') as f:
+      json.dump(precios, f)
+
 def load_titles():
   try:
-    with open('titles.json', 'r') as f:
-      return json.load(f)
+      with open('titles.json', 'r') as f:
+          return json.load(f)
   except FileNotFoundError:
-    return {}
-
-
-titles = load_titles()
-
-
-def save_titles():
-  with open('titles.json', 'w') as f:
-    json.dump(titles, f)
-
+      return {}
 
 def load_descriptions():
   try:
-    with open('descriptions.json', 'r') as f:
-      return json.load(f)
+      with open('descriptions.json', 'r') as f:
+          return json.load(f)
   except FileNotFoundError:
-    return {}
+      return {}
 
-
-descriptions = load_descriptions()
-
-
-def save_descriptions():
+def save_descriptions(descriptions):
   with open('descriptions.json', 'w') as f:
-    json.dump(descriptions, f)
+      json.dump(descriptions, f)
 
+def load_precios():
+  try:
+      with open('precios.json', 'r') as f:
+          return json.load(f)
+  except FileNotFoundError:
+      return {}
 
 def generate_unique_filename():
   characters = string.digits
   unique_id = 'A-' + ''.join(secrets.choice(characters) for _ in range(6))
   return unique_id
-
+  
+titles = {}
+precios = {}
+descriptions = {}
+# Cargar títulos y precios al inicio de la aplicación
+titles = load_titles()
+precios = load_precios()
+descriptions = load_descriptions()
 
 def load_users():
   try:
@@ -148,11 +157,13 @@ def create_db():
                  username TEXT, email TEXT, password TEXT)''')
 
     c.execute('''CREATE TABLE IF NOT EXISTS imagenes
-                 (id INTEGER PRIMARY KEY AUTOINCREMENT, 
-                 filename TEXT, username TEXT, 
-                 user_profile_picture TEXT, 
-                 description TEXT, 
-                 likes_count INTEGER)''')
+   (id INTEGER PRIMARY KEY AUTOINCREMENT, 
+   filename TEXT, 
+   folder_path TEXT,  -- Agregar columna para la ruta de la carpeta
+   username TEXT, 
+   user_profile_picture TEXT, 
+   description TEXT, 
+   likes_count INTEGER)''')
 
     c.execute('''CREATE TABLE IF NOT EXISTS likes (
                      id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -400,52 +411,74 @@ def delete_file():
       
 @app.route('/upload', methods=['POST'])
 def upload():
-  if 'image' not in request.files:
-    return jsonify({'error': 'No se ha proporcionado ninguna imagen'}), 400
+      if 'image' not in request.files:
+          return jsonify({'error': 'No se han proporcionado imágenes'}), 400
 
-  file = request.files['image']
-  if file.filename == '':
-    return jsonify({'error': 'Nombre de archivo no válido'}), 400
+      # Capturar el nombre de usuario de la sesión
+      username = session.get('username')
 
-  # Capturar el nombre de usuario de la sesión
-  username = session.get('username')
+      # Obtener el título, descripción y precio de la imagen
+      title = request.form.get('title')
+      description = request.form.get('description')
+      precio = request.form.get('precio')
 
-  # Obtener la ruta de la foto de perfil del usuario si está disponible
-  if username:
-    conn = sqlite3.connect(DATABASE)
-    c = conn.cursor()
-    c.execute("SELECT filename FROM imagenes WHERE username=?", (username, ))
-    user_profile_picture = url_for('uploaded_file',
-                                   filename='prof_pics/' + username + '.jpg')
-    conn.close()
-  else:
-    user_profile_picture = None  # o cualquier valor predeterminado que desees
+      # Generar una ID única para las imágenes
+      image_id = generate_unique_filename()
 
-  # Generar un nombre de archivo único y guardar la imagen
-  filename = generate_unique_filename()
-  filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-  file.save(filepath)
+      # Crear una carpeta con el nombre de la ID de la imagen si no existe
+      image_folder = os.path.join(app.config['UPLOAD_FOLDER'], image_id)
+      os.makedirs(image_folder, exist_ok=True)
 
-  # Obtener el título y la descripción de la imagen
-  title = request.form.get('title')
-  titles[filename] = title
-  save_titles()
-  description = request.form.get('description')
-  descriptions[filename] = description
-  save_descriptions()
+      # Guardar cada imagen subida en la carpeta con nombres diferentes
+      filenames = []  # Lista para almacenar los nombres de archivo de las imágenes cargadas
+      for i, file in enumerate(request.files.getlist('image')):
+          if file.filename == '':
+              return jsonify({'error': 'Nombre de archivo no válido'}), 400
+          filename = secure_filename(f"{image_id}-{i+1}.jpg")  # Nombre de archivo único
+          if i == 0:  # Si es la primera imagen, agregar el sufijo -1
+              filename = secure_filename(f"{image_id}-1.jpg")
+          filepath = os.path.join(image_folder, filename)
+          file.save(filepath)
+          filenames.append(filename)
 
-  # Guardar la información de la imagen en la base de datos
+      # Guardar información de la imagen en la base de datos
+      conn = sqlite3.connect(DATABASE)
+      c = conn.cursor()
+      for filename in filenames:
+          c.execute("INSERT INTO imagenes (filename, folder_path, username, description) VALUES (?, ?, ?, ?)",
+                    (filename, image_id, username, description))
+      conn.commit()
+      conn.close()
+
+      # Actualizar los diccionarios de títulos y precios para la imagen -1
+      titles[image_id + '-1.jpg'] = title
+      precios[image_id + '-1.jpg'] = precio
+      descriptions[image_id + '-1.jpg'] = description
+
+      # Guardar los diccionarios actualizados en archivos JSON
+      save_titles(titles)
+      save_precios(precios)
+      save_descriptions(descriptions)
+
+      # Redirigir al usuario a la página de la imagen cargada
+      return redirect(url_for('newone'))
+
+
+def load_folders_from_database():
   conn = sqlite3.connect(DATABASE)
   c = conn.cursor()
-  c.execute(
-      "INSERT INTO imagenes (filename, username, user_profile_picture, description) VALUES (?, ?, ?, ?)",
-      (filename, username, user_profile_picture, description))
-  conn.commit()
+  c.execute("SELECT * FROM folders")  # Suponiendo que tengas una tabla 'folders' en tu base de datos
+  folders = []
+  for folder_row in c.fetchall():
+      folder = {'id': folder_row[0], 'title': folder_row[1], 'images': []}
+      folder_path = os.path.join(app.config['UPLOAD_FOLDER'], folder_row[0])
+      for filename in os.listdir(folder_path):
+          if filename.endswith('.jpg'):
+              image = {'filename': filename, 'description': ''}
+              folder['images'].append(image)
+      folders.append(folder)
   conn.close()
-
-  # Redirigir al usuario a la página de la imagen cargada
-  return redirect(url_for('newone'))
-
+  return folders
 
 @app.route('/uploads/<path:filename>')
 def uploaded_file(filename):
@@ -865,35 +898,37 @@ def delete_image():
       url_for('error')
   )  # Redirigir a una página de error si la solicitud no es POST o si falta información
 
-
 @app.route('/registro', methods=['POST'])
 def registro():
-  data = request.json
-  if not data:
-    return jsonify({'error':
-                    'No se han proporcionado datos JSON válidos'}), 400
+    data = request.json
+    if not data:
+        return jsonify({'error': 'No se han proporcionado datos JSON válidos'}), 400
 
-  username = data.get('username')
-  email = data.get('email')
-  password = data.get('password')
+    username = data.get('username')
+    email = data.get('email')
+    password = data.get('password')
 
-  conn = sqlite3.connect(DATABASE)
-  c = conn.cursor()
-  c.execute("SELECT * FROM usuarios WHERE username=?", (username, ))
-  existing_user = c.fetchone()
-  if existing_user:
+    conn = sqlite3.connect(DATABASE)
+    c = conn.cursor()
+    c.execute("SELECT * FROM usuarios WHERE username=?", (username,))
+    existing_user = c.fetchone()
+    if existing_user:
+        conn.close()
+        error_message = 'El usuario ya está registrado'
+        print("Mensaje de error:", error_message) # Agregar esta línea para verificar el mensaje de error
+        return jsonify({'error': error_message}), 400
+
+    c.execute("INSERT INTO usuarios (username, email, password) VALUES (?, ?, ?)",
+              (username, email, password))
+    conn.commit()
     conn.close()
-    return jsonify({'error': 'El usuario ya está registrado'}), 400
+    return jsonify({'success': True})
 
-  c.execute("INSERT INTO usuarios (username, email, password) VALUES (?, ?, ?)",
-            (username, email, password))
-  conn.commit()
-  conn.close()
-  return jsonify({'message': 'Te has registrado en rollers'}), 200  
+
 PROFILE_PICS_FOLDER = os.path.join(app.config['UPLOAD_FOLDER'], 'prof_pics')
 
-@app.route('/home')
-def newone():
+@app.route('/hogar')
+def hogar():
     if 'username' not in session:
         return redirect(url_for('index'))
 
@@ -953,15 +988,224 @@ def newone():
         user_profile_picture = url_for('uploaded_file', filename=f'prof_pics/{username}.jpg')
 
     conn.close()
-    return render_template('newone.html',
+    return render_template('try.html',
                            images=shuffled_images,
-                           titles=titles,
+                           titles=titles, precios=precios,
                            descriptions=descriptions_dict,
                            likes_count_dict=likes_count_dict,
                            comments_dict=comments_dict,
                            img_usernames=img_usernames,
                            username=username,
                            user_profile_picture=user_profile_picture)
+@app.route('/store')
+def store():
+  if 'username' not in session:
+    return redirect(url_for('index'))
+
+  username = session['username']
+
+  folders = []
+  for folder_name in os.listdir(app.config['UPLOAD_FOLDER']):
+    if folder_name.startswith('A-') and os.path.isdir(os.path.join(app.config['UPLOAD_FOLDER'], folder_name)):
+        folder_images = []
+        folder_path = os.path.join(app.config['UPLOAD_FOLDER'], folder_name)
+        for filename in os.listdir(folder_path):
+            if filename.endswith('.jpg'):
+                folder_images.append(filename)
+        folders.append({'title': folder_name, 'images': folder_images})
+
+  shuffled_folders = random.sample(folders, len(folders))
+  likes_count_dict = {}
+  comments_dict = {}
+  img_usernames = {}
+  descriptions_dict = {}
+
+  conn = sqlite3.connect(DATABASE)
+  c = conn.cursor()
+  for folder in folders:
+    for image in folder['images']:
+        c.execute("SELECT COUNT(*) FROM likes WHERE image_id=?", (image,))
+        likes_count = c.fetchone()[0]
+        likes_count_dict[image] = likes_count
+
+        c.execute("SELECT username, comment_text, user_profile_picture FROM comments WHERE image_id=?",
+                  (image,))
+        comments = [{'username': row[0], 'comment_text': row[1], 'user_profile_picture': row[2]}
+                    for row in c.fetchall()]
+        comments_dict[image] = comments
+
+        c.execute("SELECT username, description FROM imagenes WHERE filename=?",
+                  (image,))
+        result = c.fetchone()
+        if result:
+            img_username, description = result
+            img_usernames[image] = img_username
+            descriptions_dict[image] = description
+        else:
+            img_usernames[image] = ""
+            descriptions_dict[image] = ""
+
+        if session.get(image) == 'liked':
+            likes_count_dict[image] += 1
+
+  user_profile_picture = os.path.join(PROFILE_PICS_FOLDER, f"{username}.jpg")
+  if not os.path.exists(user_profile_picture):
+    vendetta_image = os.path.join(PROFILE_PICS_FOLDER, "vendetta.jpg")
+    vendetta_user_image = os.path.join(PROFILE_PICS_FOLDER, f"{username}.jpg")
+    shutil.copy(vendetta_image, vendetta_user_image)
+    user_profile_picture = url_for('uploaded_file', filename=f'prof_pics/{username}.jpg')
+
+  conn.close()
+  return render_template('store.html',
+                       folders=shuffled_folders,
+                       titles=titles,
+                       descriptions=descriptions_dict,
+                       likes_count_dict=likes_count_dict,
+                       comments_dict=comments_dict,
+                       img_usernames=img_usernames,
+                       username=username,
+                       user_profile_picture=user_profile_picture, precios=precios)
+
+@app.route('/store/<folder_id>')
+def storing(folder_id):
+    if 'username' not in session:
+        return redirect(url_for('index'))
+
+    username = session['username']
+
+    folders = []
+    for folder_name in os.listdir(app.config['UPLOAD_FOLDER']):
+        if folder_name.startswith('A-') and os.path.isdir(os.path.join(app.config['UPLOAD_FOLDER'], folder_name)):
+            folder_images = []
+            folder_path = os.path.join(app.config['UPLOAD_FOLDER'], folder_name)
+            for filename in os.listdir(folder_path):
+                if filename.endswith('.jpg'):
+                    folder_images.append(filename)
+            folders.append({'title': folder_name, 'images': folder_images})
+
+    shuffled_folders = random.sample(folders, len(folders))
+    likes_count_dict = {}
+    comments_dict = {}
+    img_usernames = {}
+    descriptions_dict = {}
+
+    conn = sqlite3.connect(DATABASE)
+    c = conn.cursor()
+    for folder in folders:
+        for image in folder['images']:
+            c.execute("SELECT COUNT(*) FROM likes WHERE image_id=?", (image,))
+            likes_count = c.fetchone()[0]
+            likes_count_dict[image] = likes_count
+
+            c.execute("SELECT username, comment_text, user_profile_picture FROM comments WHERE image_id=?", (image,))
+            comments = [{'username': row[0], 'comment_text': row[1], 'user_profile_picture': row[2]} for row in c.fetchall()]
+            comments_dict[image] = comments
+
+            c.execute("SELECT username, description FROM imagenes WHERE filename=?", (image,))
+            result = c.fetchone()
+            if result:
+                img_username, description = result
+                img_usernames[image] = img_username
+                descriptions_dict[image] = description
+            else:
+                img_usernames[image] = ""
+                descriptions_dict[image] = ""
+
+            if session.get(image) == 'liked':
+                likes_count_dict[image] += 1
+
+    user_profile_picture = os.path.join(PROFILE_PICS_FOLDER, f"{username}.jpg")
+    if not os.path.exists(user_profile_picture):
+        vendetta_image = os.path.join(PROFILE_PICS_FOLDER, "vendetta.jpg")
+        vendetta_user_image = os.path.join(PROFILE_PICS_FOLDER, f"{username}.jpg")
+        shutil.copy(vendetta_image, vendetta_user_image)
+        user_profile_picture = url_for('uploaded_file', filename=f'prof_pics/{username}.jpg')
+
+    conn.close()
+    return render_template('storing.html',
+                           folders=shuffled_folders,
+                           folder_id=folder_id,  # Asegúrate de pasar folder_id
+                           titles=titles,
+                           descriptions=descriptions_dict,
+                           likes_count_dict=likes_count_dict,
+                           comments_dict=comments_dict,
+                           img_usernames=img_usernames,
+                           username=username,
+                           user_profile_picture=user_profile_picture,
+                           precios=precios)
+
+
+
+
+@app.route('/home')
+def newone():
+      if 'username' not in session:
+          return redirect(url_for('index'))
+
+      username = session['username']
+
+      folders = []
+      for folder_name in os.listdir(app.config['UPLOAD_FOLDER']):
+          if folder_name.startswith('A-') and os.path.isdir(os.path.join(app.config['UPLOAD_FOLDER'], folder_name)):
+              folder_images = []
+              folder_path = os.path.join(app.config['UPLOAD_FOLDER'], folder_name)
+              for filename in os.listdir(folder_path):
+                  if filename.endswith('.jpg'):
+                      folder_images.append(filename)
+              folders.append({'title': folder_name, 'images': folder_images})
+
+      shuffled_folders = random.sample(folders, len(folders))
+      likes_count_dict = {}
+      comments_dict = {}
+      img_usernames = {}
+      descriptions_dict = {}
+
+      conn = sqlite3.connect(DATABASE)
+      c = conn.cursor()
+      for folder in folders:
+          for image in folder['images']:
+              c.execute("SELECT COUNT(*) FROM likes WHERE image_id=?", (image,))
+              likes_count = c.fetchone()[0]
+              likes_count_dict[image] = likes_count
+
+              c.execute("SELECT username, comment_text, user_profile_picture FROM comments WHERE image_id=?",
+                        (image,))
+              comments = [{'username': row[0], 'comment_text': row[1], 'user_profile_picture': row[2]}
+                          for row in c.fetchall()]
+              comments_dict[image] = comments
+
+              c.execute("SELECT username, description FROM imagenes WHERE filename=?",
+                        (image,))
+              result = c.fetchone()
+              if result:
+                  img_username, description = result
+                  img_usernames[image] = img_username
+                  descriptions_dict[image] = description
+              else:
+                  img_usernames[image] = ""
+                  descriptions_dict[image] = ""
+
+              if session.get(image) == 'liked':
+                  likes_count_dict[image] += 1
+
+      user_profile_picture = os.path.join(PROFILE_PICS_FOLDER, f"{username}.jpg")
+      if not os.path.exists(user_profile_picture):
+          vendetta_image = os.path.join(PROFILE_PICS_FOLDER, "vendetta.jpg")
+          vendetta_user_image = os.path.join(PROFILE_PICS_FOLDER, f"{username}.jpg")
+          shutil.copy(vendetta_image, vendetta_user_image)
+          user_profile_picture = url_for('uploaded_file', filename=f'prof_pics/{username}.jpg')
+
+      conn.close()
+      return render_template('newone.html',
+                             folders=shuffled_folders,
+                             titles=titles,
+                             descriptions=descriptions_dict,
+                             likes_count_dict=likes_count_dict,
+                             comments_dict=comments_dict,
+                             img_usernames=img_usernames,
+                             username=username,
+                             user_profile_picture=user_profile_picture)
+
 
 @app.route('/shared/<image_id>')
 def shared(image_id):

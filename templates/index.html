@@ -1972,19 +1972,18 @@ button.vjs-play-control.vjs-control.vjs-button {
     background: linear-gradient(90deg, transparent, #03f40f);
     animation: btn-anim1 2s linear infinite;
   }
-    .image-preview-container {
-      width: 100%;
-      height: auto;
-      margin-bottom: 10px;
-  }
+   .image-preview-container {
+       display: flex; /* Utilizar flexbox para mostrar las imágenes en línea */
+       flex-wrap: wrap; /* Permitir que las imágenes se envuelvan en filas */
+       justify-content: space-around; /* Distribuir el espacio entre las imágenes */
+   }
 
-  .image-preview-container img {
-      max-width: 100%;
-      height: auto;
-      display: none;
-      border-radius: 10px; /* Agrega bordes redondeados a la imagen de vista previa */
-  }
-
+   .image-preview-container img {
+       max-width: 200px;
+       height: auto;
+       margin: 5px; /* Añadir un pequeño margen entre las imágenes */
+       border-radius: 10px;
+   }
 </style>
 
 <div class="main-container">
@@ -1993,32 +1992,33 @@ button.vjs-play-control.vjs-control.vjs-button {
 
  
   <div class="upload-box">
-          <div class="center">
-              <form action="/upload" method="post" enctype="multipart/form-data" class="upload-form">
-              
-                </div>
-          
-                  
-                  <div class="input-container">
-                     <div class="contenedor-imagen">
-    <input type="file" name="image" id="image" accept="image/*" required style="display: none;">
-    <img id="image-preview" style="display: none; max-width: 200px;" alt="Vista previa de la imagen">
-</div>
-                      <label for="image" class="select">
-  <span class="button__icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" viewBox="0 0 24 24" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" stroke="currentColor" height="24" fill="none" class="svg"><line y2="19" y1="5" x2="12" x1="12"></line><line y2="12" y1="12" x2="19" x1="5"></line></svg></span></label>
-                  
-
-                    <div class="naming-box">
+      <div class="center">
+          <form action="/upload" method="post" enctype="multipart/form-data" class="upload-form">
+              <div class="input-container">
+                  <div class="contenedor-imagen">
+                      <input type="file" name="image" id="image" accept="image/*" required multiple style="display: none;">
+                      <div class="image-preview-container" id="image-preview"></div> <!-- Contenedor para las imágenes previas -->
+                  </div>
+                  <label for="image" class="select">
+                      <span class="button__icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" viewBox="0 0 24 24" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" stroke="currentColor" height="24" fill="none" class="svg"><line y2="19" y1="5" x2="12" x1="12"></line><line y2="12" y1="12" x2="19" x1="5"></line></svg></span>
+                  </label>
+                  <div class="naming-box">
                       <input type="text" name="title" id="title" placeholder="Titulo">
-                    </div>
-                    <div class="naming-box">
-                    <input type="text" name="description" id="description" placeholder="Escribe una descripcion">
-                    </div>
-    </div>
-                  <button type="submit" class="subir">Subir Publicacion</button>
-                  <span id="file-name"></span>
-              </form>
-          </div>
+                  </div>
+                  <div class="naming-box">
+                      <input type="text" name="description" id="description" placeholder="Escribe una descripcion">
+                  </div>
+                  <div class="naming-box">
+                      <input type="text" name="precio" id="precio" placeholder="Dale valor a tu producto">
+                  </div>
+              </div>
+              <button type="submit" class="subir">Subir Publicacion</button>
+              <span id="file-name"></span>
+          </form>
+      </div>
+  </div>
+
+
       </div>
 
 </div>
@@ -2502,43 +2502,63 @@ $(".discover").addClass("is-active");
     });
 
   </script>
- <script>
-    const fileInput = document.getElementById('image');
-      const imagePreview = document.getElementById('image-preview');
+  <script>
+      const fileInput = document.getElementById('image');
+      const imagePreviews = document.querySelectorAll('.image-preview');
 
       // Escuchar el evento 'change' en el elemento de entrada de archivo
       fileInput.addEventListener('change', function () {
-          // Verificar si se seleccionó un archivo
-          if (fileInput.files.length > 0) {
-              // Obtener la URL de la imagen seleccionada
-              const imageURL = URL.createObjectURL(fileInput.files[0]);
-              imagePreview.src = imageURL;
-              imagePreview.style.display = 'block';
-              // Mostrar la imagen
-          } else {
-              // Si no se seleccionó ningún archivo, ocultar la imagen de vista previa
-              imagePreview.src = '';
-              imagePreview.style.display = 'none'; // Ocultar la imagen
-          }
-
+          // Recorrer todas las imágenes previas
+          imagePreviews.forEach(function(imagePreview, index) {
+              // Verificar si se seleccionó un archivo correspondiente al índice actual
+              if (fileInput.files.length > index) {
+                  // Obtener la URL de la imagen seleccionada
+                  const imageURL = URL.createObjectURL(fileInput.files[index]);
+                  imagePreview.src = imageURL;
+                  imagePreview.style.display = 'block'; // Mostrar la imagen
+              } else {
+                  // Si no se seleccionó ningún archivo correspondiente, ocultar la imagen de vista previa
+                  imagePreview.src = '';
+                  imagePreview.style.display = 'none'; // Ocultar la imagen
+              }
+          });
       });
-
-      
   </script>
- <script>
-  document.getElementById('image').addEventListener('change', function() {
-  var imagePreview = document.getElementById('image-preview');
-  var smallHeader = document.querySelector('.small-header');
 
-  // Verifica si hay una vista previa de imagen seleccionada
-  if (this.files && this.files[0]) {
-    imagePreview.style.display = 'block'; // Muestra la vista previa de la imagen
-    smallHeader.style.display = 'none'; // Oculta el small-header
-  } else {
-    imagePreview.style.display = 'none'; // Oculta la vista previa de la imagen si no hay imagen seleccionada
-    smallHeader.style.display = 'block'; // Muestra el small-header si no hay imagen seleccionada
-  }
-});
+ <script>
+   document.getElementById('image').addEventListener('change', function() {
+       var imagePreview = document.getElementById('image-preview');
+       var smallHeader = document.querySelector('.small-header');
+
+       // Limpiar la vista previa actual
+       imagePreview.innerHTML = '';
+
+       // Recorrer las imágenes seleccionadas
+       for (var i = 0; i < this.files.length; i++) {
+           var file = this.files[i];
+           var reader = new FileReader();
+
+           // Mostrar la imagen en el preview
+           reader.onload = function(e) {
+               var img = document.createElement('img');
+               img.src = e.target.result;
+               img.style.maxWidth = '200px'; // Ajustar el tamaño de la imagen
+               imagePreview.appendChild(img);
+           };
+
+           // Leer el contenido de la imagen
+           reader.readAsDataURL(file);
+       }
+
+       // Mostrar el preview de imagen si hay alguna imagen seleccionada
+       if (this.files && this.files.length > 0) {
+           imagePreview.style.display = 'block';
+           smallHeader.style.display = 'none';
+       } else {
+           imagePreview.style.display = 'none';
+           smallHeader.style.display = 'block';
+       }
+   });
   </script>
 
 </body>
